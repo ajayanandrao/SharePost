@@ -1,0 +1,41 @@
+@import "./../Styles/Mixin.scss";
+@import "./../Styles/Variable";
+
+.form-width{
+    width: 300px;
+    margin: 0 auto;
+    .img-div{
+        width: 100%;
+        display: flex;
+        justify-content: center;
+        margin-top: 2rem;
+    }
+    .img{
+        width: 100px;
+        height: 100px;
+        object-fit: cover;
+        border-radius: 50%;
+        cursor: pointer;
+    }
+    .photoinput{
+        display: none;
+    }
+    .text-center{
+        text-align: center;
+    }
+    .btn{
+        box-shadow: none !important;
+        text-transform: capitalize !important;
+    }
+    .form-control{
+        // border: none !important;
+    }
+    .btn-success{
+        font-size: 16px;
+        height: 35px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+}
+

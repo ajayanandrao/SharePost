@@ -1,0 +1,43 @@
+@import "./../Styles/Variable";
+@import "./../Styles/Mixin.scss";
+
+.TopProfile-bg {
+    width: 100%;
+    height: 380px;
+    background-image: url(./../Image/i3.png);
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: center;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+
+    .TopProfile-absolut {
+        width: 500px;
+        height: 250px;
+        background: #ffffff36;
+        box-shadow: 10px 10px 10px rgba(0, 0, 0, 0.1);
+        backdrop-filter: blur(14px);
+        border: 1px solid rgba(255, 255, 255, 0.329);
+        border-radius: 0.5rem;
+
+        .TopProfile-Profile-div {
+            width: 100%;
+            height: 150px;
+            // background: red;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+
+            .TopProfile-img {
+                width: 100px;
+                height: 100px;
+                border-radius: 50%;
+                object-fit: cover;
+            }
+
+            .TopProfile-name {}
+        }
+    }
+}

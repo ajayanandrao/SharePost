@@ -1,0 +1,108 @@
+@import "./../Styles/Mixin.scss";
+@import "./../Styles/Variable.scss";
+
+.post-container {
+    width: 500px;
+    background: #0B243B;
+    border-radius: 0.5rem;
+    overflow: hidden;
+    color: rgba(255, 255, 255, 0.5);
+    border: 1px solid $link;
+
+    .post-inner {
+        padding: 1rem;
+    }
+
+    .user-post-input {
+        flex: 1;
+        width: calc(55%);
+        height: 35px;
+        border: none;
+        background: #0a1929;
+        color: white;
+        border-radius: 30px;
+        margin: 0 1rem;
+        padding-inline-start: 15px;
+        transition: 0.5s ease-in-out;
+        font-size: 14px;
+        &:focus{
+            outline: none;
+            width: calc(95% - 8rem);
+        }
+
+    }
+
+
+    .post-name {
+        font-weight: 500;
+        color: #0174DF;
+        cursor: pointer;
+    }
+
+
+    .post-add-container {
+        display: flex;
+        align-items: center;
+        margin: 0.4rem 0;
+
+        .post-category-contaner {
+            flex: 1;
+            border-radius: 30px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            border: 1px solid transparent;
+            &:hover {
+                background-color: #0a1929;
+                border: 1px solid $border-div;
+            }
+
+            .post-cat-img {
+                width: 25px;
+                cursor: pointer;
+            }
+
+            .post-cat-title {
+                font-weight: 500;
+                margin: 0 1rem;
+                cursor: pointer;
+            }
+        }
+    }
+
+    .postImg-div {
+        width: 100%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        object-fit: cover;
+
+        .postImg {
+            max-width: 100%;
+            max-height: 300px;
+        }
+    }
+
+    .user-img {
+        width: 45px;
+        height: 45px;
+        border-radius: 50%;
+        object-fit: cover;
+        object-position: center;
+    }
+}
+
+@include mobile {
+    .post-container {
+        width: 100%;
+    }
+
+    .user-post-input {
+        flex: 1;
+        min-width: 60% !important;
+        margin: 0 1rem;      
+    }
+
+}

@@ -1,0 +1,22 @@
+@import "./../Styles/Mixin.scss";
+
+@include tab{
+    .navbar-lines{
+        display: block !important;
+    }
+    .navbar-profile{
+        .nav-icon{
+            margin: 0 1rem;
+            display: none !important;
+        }
+     }
+
+}
+@include mobile{
+    .navbar-profile{
+        display: none !important;
+    }
+    .navbar-items{
+        // display: none !important;
+    }
+}

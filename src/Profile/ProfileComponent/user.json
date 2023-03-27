@@ -1,0 +1,48 @@
+[
+  {
+    "id": 1,
+    "name": "ajay anandrao",
+    "img": "https://firebasestorage.googleapis.com/v0/b/fir-25-12-2022.appspot.com/o/userPhotos%2FAjay%20Anandrao?alt=media&token=0c74464c-e4b5-410f-b758-98774af51ef5"
+  },
+  {
+    "id": 2,
+    "name": "Pooja chavan",
+    "img": "https://firebasestorage.googleapis.com/v0/b/fir-25-12-2022.appspot.com/o/userPhotos%2Fpooja%20chavan?alt=media&token=69b6adc4-5c88-44ac-b541-097493ee6e0d"
+  },
+  {
+    "id": 3,
+    "name": "nikita patil",
+    "img": "https://firebasestorage.googleapis.com/v0/b/fir-25-12-2022.appspot.com/o/userPhotos%2Fnikita%20patil?alt=media&token=5bf74863-46c0-4440-878e-19fea56d7c21"
+  },
+  {
+    "id": 4,
+    "name": "pradnya salve",
+    "img": 
+    "https://firebasestorage.googleapis.com/v0/b/fir-25-12-2022.appspot.com/o/userPhotos%2Fpradnya%20salve?alt=media&token=ecdb880f-806b-4838-9a19-ee59c13a8f61"
+  },
+  {
+    "id": 5,
+    "name": "shruti kulkarni",
+    "img": "https://images.unsplash.com/photo-1623091411395-09e79fdbfcf3?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8NHx8aW5kaWFuJTIwZ2lybHxlbnwwfHwwfHw%3D&w=1000&q=80"
+  },
+  {
+    "id": 6,
+    "name": "vaishali naik",
+    "img": "https://images.unsplash.com/photo-1623091410901-00e2d268901f?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8OXx8aW5kaWFuJTIwZ2lybHxlbnwwfHwwfHw%3D&w=1000&q=80"
+  },
+  {
+    "id": 7,
+    "name": "prakash",
+    "img": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRGTxecqLPt944Mxlz83Ubrczu4bMLjZACownKKaUPe&s"
+  },
+  {
+    "id": 8,
+    "name": "punam",
+    "img": "https://images.unsplash.com/photo-1615022702095-ff2c036f3360?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8Mnx8aW5kaWFuJTIwZ2lybHxlbnwwfHwwfHw%3D&w=1000&q=80"
+  },
+  {
+    "id": 9,
+    "name": "Pooja anandrao",
+    "img": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTZTLNKo_JU2xFwns3BZrHgvw1VbwMyxuk79sO_0RLRy9Rc81spfzwVhxIrjL6sAvnT37Q&usqp=CAU"
+  }
+]

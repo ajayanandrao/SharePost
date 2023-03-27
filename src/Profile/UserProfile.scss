@@ -1,0 +1,181 @@
+@import "./UserProfileMixin.scss";
+
+@import "./../../variables";
+@import "./../../Mixin.scss";
+
+.bg-div {
+    width: 100%;
+    height: 350px;
+    // background-image: url(./../../img/bg.jpg);
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center;
+    display: flex;
+    justify-content: center;
+    align-items: flex-end;
+    
+    .profile-div {
+        width: 1000px;
+        height: 200px;
+        background: #174c7e3f;
+        // box-shadow: 10px 10px 10px rgba(0, 0, 0, 0.1);
+        backdrop-filter: blur(10px);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 0.5rem;
+        .profile{
+            width: 500px;
+            display: flex;
+            align-items: center;
+            justify-content: space-evenly;
+            // background: red;
+            #overlay {
+                position: fixed;
+                display: none;
+                width: 50%;
+                margin: 0 auto;
+                height: 100%;
+                top: 0;
+                left: 0;
+                right: 0;
+                bottom: 0;
+                background-color: #0b243b;
+                z-index: 2;
+                border-radius: 0.5rem;
+                .over-x{
+                    display: flex;
+                    justify-content: end;
+                    .x{
+                        font-size: 26px;
+                        cursor: pointer;
+                    }
+                }
+                .overlay-inner{
+                    display: flex;
+                    flex-direction: column;
+                    align-items: center;
+                    height: 100%;
+                }
+              }
+            .overlary-img-e{
+                width: 150px;
+                height: 150px;
+                // background-image: url(./../../img/c1.png);
+                background-size: cover;
+                background-position: center;
+                background-repeat: no-repeat;
+                border-radius: 50%;
+                position: relative;
+                object-fit: cover;
+                cursor: pointer;
+                .pro-update-c{
+                    display: flex;
+                    justify-content: center;
+                    align-items: flex-end;
+                    padding: 0.5rem;
+                    background: rgba(0, 0, 0, 0.397);
+                    width: 100%;
+                    height: 100%;
+                    border-radius: 50%;
+                    
+                    opacity: 0%;
+                    cursor: pointer;
+                    &:hover{
+                        opacity: 100%;
+                    }
+                }
+
+            }
+
+            .profile-img {
+                width: 150px;
+                height: 150px;
+                object-fit: cover;
+                border-radius: 50%;
+                cursor: pointer;
+            }
+            .profile-name{
+                
+            }
+        }
+        
+    }
+}
+
+
+
+.relativ-div {
+    display: flex;
+    justify-content: center;
+
+    .profile-div {
+        width: 1000px;
+        border-radius: 0.5rem;
+        margin-top: 1rem;
+    }
+
+}
+
+.profile-details-div {
+    margin: 0 auto;
+    // background: $div-bg;
+    display: flex;
+    justify-content: center;
+    .details-container {
+        display: flex;
+        
+        .details-container-text {
+            margin: 0 2rem;
+            cursor: pointer;
+            width: 80px;
+            height: 50px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-weight: 600;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+
+            // background: red;
+            &:hover {
+                // color: #1DA1F2;
+                border-bottom: 3px solid #1DA1F2;
+                border-top: 3px solid transparent;
+            }
+        }
+    }
+}
+
+
+// ====================================================
+
+
+@include desk2{
+    .profile-div {
+        width: 90% !important;
+    }
+}
+@include tab{
+    .details-container-text {
+        margin: 0 1rem !important;
+    }
+}
+@include mobile{
+    .bg-div {
+        height: 350px !important;
+    }
+    .profile-div {
+        height: 250px !important;
+        width: 100% !important;
+        .profile{
+            width: 100% !important;
+            .profile-img {
+                width: 100px !important;
+                height: 100px !important;
+            }
+        }
+    }
+    .details-container-text {
+        margin: 0 !important;
+    }
+}

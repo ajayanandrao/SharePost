@@ -1,0 +1,143 @@
+@import "./../../Styles/Variable.scss";
+@import "./../../Styles/Mixin.scss";
+
+.friend-bg-div {
+    width: 100%;
+    // height: 100vh;
+    display: flex;
+    justify-content: center;
+
+    .friend-container {
+        width: 800px;
+        // height: 350px;
+        background: $bg-div;
+        display: flex;
+        border-radius: 0.5rem;
+        box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.1);
+        padding: 0.5rem 1.5rem;
+        flex-direction: column;
+
+        .friend-div {
+            width: 100%;
+            height: 50px;
+            display: flex;
+            align-items: center;
+            .friend-text {
+                // flex: 0.9;
+                // background:blue;
+                // margin-right: 1rem;
+                
+            }
+
+            .search-friend-div {
+                width: 100%;
+                display: flex;
+                // background: red;
+                // flex-basis: 500px;
+                .search {
+
+                    display: block;
+                    margin: 0 auto;
+                    background: $bg;
+                    border-radius: 30px;
+                    padding-left: 0.5rem;
+                }
+
+                .s-f-input {
+                    width: 300px;
+                    height: 40px;
+                    border-radius: 50px;
+                    border: none;
+                    padding-inline-start: 10px;
+                    color: white;
+                    background-color: $bg;
+                }
+
+                .s-f-input:focus {
+                    outline: none;
+                }
+            }
+        }
+
+
+        .friend-wrapper {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            margin-top: 1rem;
+
+            .friend-list-div {
+               
+                width: 240px;
+                height: 100px;
+                display: flex;
+                align-items: center;
+                margin: 1rem 0;
+
+                // background: blueviolet;
+                .friend-img {
+                    width: 80px;
+                    height: 80px;
+                    object-fit: cover;
+                    border-radius: 0.5rem;
+                }
+
+                .friend-name {
+                    margin: 0 0.5rem;
+                }
+            }
+        }
+    }
+}
+
+@include tab{
+    .friend-container {
+        width: 100% !important;
+        height: auto !important;
+    }
+    .friend-list-div {
+        height: auto !important;
+        width: 150px !important;
+        flex-direction: column;
+    }
+    .friend-wrapper{
+        .friend-name, h6 {
+            margin-top: 0.3rem;
+        }
+    }
+}
+
+@include mobile {
+    .friend-text {
+        flex: 0 !important;
+        margin-right: 1rem;
+    }
+
+    .search-friend-div {
+        flex: 1 !important;
+
+        .s-f-input {
+            width: 80% !important;
+        }
+    }
+
+    .friend-container {
+        width: 100% !important;
+        height: auto !important;
+    }
+
+    .friend-list-div {
+        flex-direction: row !important;
+        height: auto !important;
+        width: 200px !important;
+        flex-direction: column;
+    }
+    .friend-wrapper{
+        .friend-name, h6 {
+            font-size: 16px;
+            margin-top: 0.3rem;
+        }
+    }
+
+
+}

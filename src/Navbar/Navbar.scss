@@ -1,0 +1,203 @@
+@import "./NavbarMixin.scss";
+@import "./../Styles/Variable";
+// @import "./../../Mixin.scss";
+
+
+.dropdown-menu{
+    height: 150px;
+    border-radius: 10px;
+    background: #0b243b46;
+    box-shadow: 10px 10px 10px rgba(0, 0, 0, 0.1);
+    backdrop-filter: blur(15px);
+    border: none;
+    
+    .dropdown-item{
+        margin: 0.5rem 0;
+        display: flex;
+        justify-content: center;
+        font-size: 14px;
+        border-radius: 30px;
+        color: white;
+    &:hover{
+        background: #0a1929;
+    }
+    }
+}
+
+.link{
+    color: white;
+    &:hover{
+        color: white;
+    }
+}
+
+
+.navbartop {
+    width: 100%;
+    height: 60px;
+    display: flex;
+    align-items: center;
+    box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.2);
+    margin-bottom: 0.5rem;
+    // background-color: #0a1929a6;
+    background: #0b243b;
+    // backdrop-filter: blur(30px);
+    position: sticky;
+    top: 0;
+    z-index: 1;
+
+    .al-center {
+        display: flex;
+        align-items: center;
+        justify-content: space-evenly;
+        .navbar-lines{
+            font-size: 25px;
+            cursor: pointer;
+            margin-right: 1rem;
+            display: none;
+        }
+        .navbar-name {
+            flex: 1;
+        }
+
+        .navbar-items {
+            flex: 2;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            .navbar-search-c {
+                flex-basis: 300px;
+                background-color: $bg;
+                // border:1px solid $link;
+                border-radius: 30px;
+                padding: 0.5rem;
+                display: flex;
+                cursor: pointer;
+                .navbar-search {
+                    width: 100%;
+                    padding-inline-start: 10px;
+                    border: none;
+                    background-color: transparent;
+                    color: white;
+                }
+
+            }
+
+            .navbar-search:focus {
+                outline: none;
+            }
+
+            .nav-icon {
+                font-size: 24px;
+                margin: 0 0.5rem;
+            }
+        }
+            
+        .navbar-profile {
+            flex: 1;
+            display: flex;
+            justify-content: end;
+            align-content: center;
+            .navbar-inner-profile{
+                display: flex;
+                align-items: center;
+                .n-icons{
+                    display: flex;
+                    .nav-icon{
+                        cursor: pointer;
+                        margin: 0 2rem;
+                    }
+                }
+            }
+            
+            .navbar-profile-img {
+                width: 45px;
+                height: 45px;
+                object-fit: cover;
+                border-radius: 50%;
+                cursor: pointer;
+            }
+        }
+    }
+}
+
+body {
+    font-family: "Lato", sans-serif;
+}
+
+.sidenav {
+    height: 100%;
+    width: 0;
+    position: fixed;
+    z-index: 1;
+    top: 0;
+    left: 0;
+    background: #0b243b46;
+    overflow-x: hidden;
+    transition: 0.5s;
+    padding-top: 60px;
+    box-shadow: 10px 10px 10px rgba(0, 0, 0, 0.2);
+    backdrop-filter: blur(15px);
+
+    .a {
+        margin: 1rem 0;
+        padding: 8px 8px 8px 25px;
+        text-decoration: none;
+        color: white;
+        display: block;
+        transition: 0.3s;
+        &:hover{
+            color: #f1f1f1;
+            background: #0a1929;
+            border-radius: 50px;
+        }
+    }
+
+    .icon-c {
+        width: 230px;
+        display: flex;
+    
+        .nav-icon {
+            font-size: 23px;
+            margin-right: 20px;
+        }
+    }
+    .nav-profile-c {
+        width: 230px;
+        display: flex;
+        align-items: center;
+        justify-content: space-evenly;
+        cursor: pointer;
+        // background: red;
+        color: white;
+    }
+    
+    .closebtn {
+        position: absolute;
+        top: 0;
+        right: 15px;
+        font-size: 36px;
+        margin-left: 50px;
+        cursor: pointer;
+    }
+    
+    .nav-link {
+        margin: 0 auto;
+    }
+}
+
+
+
+
+
+
+@media screen and (max-height: 450px) {
+    .sidenav {
+        padding-top: 15px;
+    }
+
+    .sidenav a {
+        font-size: 18px;
+    }
+}
+
