@@ -1,17 +1,16 @@
 {
   "files": {
-    "main.css": "/SharePost/static/css/main.61406afc.css",
-    "main.js": "/SharePost/static/js/main.c0f2c3c4.js",
+    "main.css": "/SharePost/static/css/main.a9d552da.css",
+    "main.js": "/SharePost/static/js/main.54f3b8ed.js",
     "static/js/787.6cf5c74a.chunk.js": "/SharePost/static/js/787.6cf5c74a.chunk.js",
-    "static/media/i3.png": "/SharePost/static/media/i3.4a2369772a63fca8d5cf.png",
     "static/media/200.png": "/SharePost/static/media/200.6630fa2532637ce39dbd.png",
     "index.html": "/SharePost/index.html",
-    "main.61406afc.css.map": "/SharePost/static/css/main.61406afc.css.map",
-    "main.c0f2c3c4.js.map": "/SharePost/static/js/main.c0f2c3c4.js.map",
+    "main.a9d552da.css.map": "/SharePost/static/css/main.a9d552da.css.map",
+    "main.54f3b8ed.js.map": "/SharePost/static/js/main.54f3b8ed.js.map",
     "787.6cf5c74a.chunk.js.map": "/SharePost/static/js/787.6cf5c74a.chunk.js.map"
   },
   "entrypoints": [
-    "static/css/main.61406afc.css",
-    "static/js/main.c0f2c3c4.js"
+    "static/css/main.a9d552da.css",
+    "static/js/main.54f3b8ed.js"
   ]
 }
