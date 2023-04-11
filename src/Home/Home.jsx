@@ -53,7 +53,7 @@ const Home = () => {
   };
   
   return (
-    <div>
+    <div style={{flex:"1", paddingTop:"0.5rem"}}>
 
       <div className="btn" onClick={handleScrollToTop} id="scrollTopBtn" >
         <AiOutlineArrowUp className="top-arrow" />

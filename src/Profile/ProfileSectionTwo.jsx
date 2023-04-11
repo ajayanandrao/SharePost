@@ -5,7 +5,7 @@ import { db } from '../firebase';
 import About from './ProfileComponent/About';
 import Friends from './ProfileComponent/Friends';
 import Photos from './ProfileComponent/Photos';
-import UserPost from './ProfileComponent/UserPost';
+import UserPostProps from './ProfileComponent/UserPostProps';
 import "./ProfileSectionTow.scss";
 
 
@@ -38,7 +38,7 @@ const ProfileSectionTwo = () => {
       <hr className='hrr' />
 
       <div id="Post" className="tabcontent" style={{ display: "block" }}>
-        <UserPost />
+          <UserPostProps/>
       </div>
 
       <div id="About" style={{ display: "none" }} className="tabcontent">

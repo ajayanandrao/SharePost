@@ -1,0 +1,14 @@
+@import "./../../Styles/Mixin.scss";
+@import "./../../Styles/Variable.scss";
+@import "./../../Styles/Insta.scss";
+
+
+.left{
+    flex: 1;
+}
+
+@include insta-1160{
+    .left{
+        display: none !important;
+    }
+}

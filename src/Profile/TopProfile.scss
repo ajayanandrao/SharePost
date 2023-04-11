@@ -4,18 +4,18 @@
 .TopProfile-bg {
     width: 100%;
     height: 380px;
-    background-image: url(./../Image/i3.png);
+    background-image: url("https://images.pexels.com/photos/2559941/pexels-photo-2559941.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1");
     background-repeat: no-repeat;
     background-size: cover;
     background-position: center;
     display: flex;
     justify-content: center;
-    align-items: center;
+    align-items: end;
     position: relative;
 
     .TopProfile-absolut {
-        width: 500px;
-        height: 250px;
+        width: 800px;
+        height: 230px;
         background: #ffffff36;
         box-shadow: 10px 10px 10px rgba(0, 0, 0, 0.1);
         backdrop-filter: blur(14px);
@@ -29,7 +29,7 @@
             display: flex;
             justify-content: center;
             align-items: center;
-
+            z-index: 1;
             .TopProfile-img {
                 width: 100px;
                 height: 100px;

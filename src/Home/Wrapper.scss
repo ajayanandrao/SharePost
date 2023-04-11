@@ -1,0 +1,41 @@
+@import "./../Styles/Variable";
+@import "./../Styles/Mixin.scss";
+@import "./../Styles/insta.scss";
+
+// .Wrapper-container {
+//     display: flex;
+
+//     .left {
+//         // background-color: red;
+//         flex: 1;
+//     }
+
+//     .Wrapper-center {
+//         flex: 1;
+//         width: 100%;
+//         // background-color:blue;
+//     }
+
+//     .right {
+//         flex: 1;
+//         padding: 1.5rem;
+//         position: -webkit-sticky;
+//         position: sticky;
+//         top: 0;
+//         min-height: 300px; /* Set a minimum height */
+//         height: 100%; 
+//         // overflow-y: scroll;
+//     }
+// }
+
+.Wrapper-container {
+    display: flex;
+    width: 100%;
+    
+}
+
+@include tab{
+    .Wrapper-container{
+        flex-direction: column;
+    }
+}

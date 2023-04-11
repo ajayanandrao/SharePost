@@ -13,7 +13,7 @@ import { AuthContext } from '../AuthContaxt';
 import { v4, uuidv4 } from "uuid";
 import { getDownloadURL, ref, uploadBytesResumable } from 'firebase/storage';
 import { addDoc, arrayUnion, collection, doc, onSnapshot, orderBy, query, serverTimestamp, Timestamp, updateDoc } from 'firebase/firestore';
-import EmojiPicker from 'emoji-picker-react';
+import Picker from '@emoji-mart/react';
 
 
 
@@ -26,6 +26,9 @@ const Post = () => {
   const [postText, setPostText] = useState("");
   const [api, setApiData] = useState([]);
   const [img, setImg] = useState(null);
+  const [showEmoji, setShowEmoji] = useState(false);
+  const [showImg, setShowImg] = useState(false);
+
 
   // const { uuid } = require('uuidv4');
 
@@ -40,11 +43,11 @@ const Post = () => {
   const addPost = async (e) => {
     if (postText && api) {
       const colRef = collection(db, "AllPosts");
-  
+
       if (img) {
         const storageRef = ref(storage, "Post/" + v4());
         const uploadTask = uploadBytesResumable(storageRef, img);
-  
+
         uploadTask.on(
           "state_changed",
           (snapshot) => {
@@ -56,7 +59,7 @@ const Post = () => {
               document.getElementById("p1").style.display = "none";
             }
           },
-          (error) => {},
+          (error) => { },
           () => {
             getDownloadURL(uploadTask.snapshot.ref).then(async (downloadURL) => {
               console.log("File available at", downloadURL);
@@ -68,7 +71,7 @@ const Post = () => {
                 img: downloadURL,
                 bytime: serverTimestamp(),
               });
-  
+
               await updateDoc(doc(db, "userPostsList", currentuser.uid), {
                 messages: arrayUnion({
                   id: v4(),
@@ -91,7 +94,7 @@ const Post = () => {
           name: postText,
           bytime: serverTimestamp(),
         });
-  
+
         await updateDoc(doc(db, "userPostsList", currentuser.uid), {
           messages: arrayUnion({
             id: v4(),
@@ -105,18 +108,45 @@ const Post = () => {
       }
       setImg(null);
       setPostText("");
+      setShowEmoji(false);
     } else {
       // handle error case where postText or api is missing
     }
   };
-  
-
 
   const handleKey = (e) => {
     if (e.key === "Enter") {
       addPost();
     }
   };
+
+  const addEmoji = (e) => {
+    let sym = e.unified.split("-")
+    let codesArray = []
+    sym.forEach((el) => codesArray.push("0x" + el));
+    let emoji = String.fromCodePoint(...codesArray);
+    setPostText(postText + emoji);
+  };
+  
+  const handleInputClick = () => {
+    // setShowEmoji(false);
+    // setImg(!showImg);
+  };
+
+  const Emoji = () => {
+    setShowEmoji(!showEmoji);
+    setShowImg(!showImg);
+    
+  };
+  const ShowImg = () => {
+    setShowImg(true);
+  };
+  const Wrapp = () => {
+    // handleInputClick();
+    ShowImg();
+  };
+
+  
 
 
   return (
@@ -132,6 +162,7 @@ const Post = () => {
               className="user-post-input"
               type="text"
               placeholder={`Whats on in your mind ? `}
+              onClick={handleInputClick}
               onChange={(e) => setPostText(e.target.value)}
               onKeyDown={handleKey}
               value={postText}
@@ -144,28 +175,33 @@ const Post = () => {
           <div className="post-add-container">
 
             <div className="post-category-contaner">
-              <label htmlFor="p" style={{ cursor: "pointer" }}>
+              <label htmlFor="p" onClick={Wrapp} style={{ cursor: "pointer" }}>
                 <input type="file" id="p" onChange={(e) => setImg(e.target.files[0])} style={{ display: "none" }} />
                 <img src={photo} className="post-cat-img" />
                 <span className="post-cat-title">Photos</span>
               </label>
             </div>
 
-            <div className="post-category-contaner">
+            <div  className="post-category-contaner">
               <img src={video} className="post-cat-img" />
               <span className="post-cat-title">Video</span>
             </div>
 
-            <div className="post-category-contaner">
+            <div onClick={Emoji} className="post-category-contaner">
               <img src={smile} className="post-cat-img" />
               <span className="post-cat-title">Feeling</span>
             </div>
           </div>
+          {showEmoji && (<div>
+            <div className='emoji'>
+              <Picker onEmojiSelect={addEmoji} />
+            </div>
+          </div>)}
           {/* <EmojiPicker /> */}
 
-
           <div className="postImg-div">
-            <img className="postImg" src={img ? URL.createObjectURL(img) : ""} alt="" />
+            {showImg && (<img className="postImg" src={img ? URL.createObjectURL(img) : ""} alt="" />)}
+
           </div>
 
         </div>

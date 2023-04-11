@@ -151,6 +151,7 @@ const SignUp = () => {
                         <p>
                             Have an account ? <Link to="/">Login</Link>
                         </p>
+                        <a href="https://google.com">ajay</a>
                         <p>or sign up with:</p>
 
                         <button type="button" className="btn btn-floating mx-3">

@@ -14,6 +14,32 @@
     flex-direction: column;
 }
 
+.HeartAnimation {
+    padding-top: 2em;
+    background-image: url('https://s3-us-west-2.amazonaws.com/s.cdpn.io/66955/web_heart_animation.png');
+    background-repeat: no-repeat;
+    background-size: 2900%;
+    background-position: left;
+    height: 60px;
+    width: 60px;
+    margin: 0 auto;
+    cursor: pointer;
+}
+
+.animate {
+    animation: heart-burst .8s steps(28) forwards;
+}
+
+@keyframes heart-burst {
+    0% {
+        background-position: left
+    }
+
+    100% {
+        background-position: right
+    }
+}
+
 .Feed-card-div {
     width: 100%;
     background: $bg-div;
@@ -87,12 +113,25 @@
 
     .Feed-Section-three {
         display: flex;
+        align-items: center;
         justify-content: space-between;
         margin: 0.5rem 0;
         padding: 0 1rem;
 
         .Feed-Comment-Section-div {
             border-radius: 50%;
+
+            .feed-comment-section-inner {
+                display: flex;
+                align-items: center;
+                position: relative;
+
+                .like-count{
+                    position: absolute;
+                    left: 35px;
+                }
+            }
+
             .react-icons {
                 font-size: 18px;
             }
@@ -100,10 +139,17 @@
     }
 
     .Feed-Comment-Div {
-        height: 40px;
+        // height: 40px;
         display: flex;
-        align-items: center;
+        flex-direction: column;
+        // align-items: center;
         padding: 0 1rem;
+
+        .feed-comment-div-one {
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+        }
 
         .Feed-Comment-Input {
             flex-grow: 1;
@@ -119,41 +165,46 @@
 }
 
 // ====================================
-.see-com{
+.see-com {
     font-size: 12px;
     margin-left: 1rem;
     color: #ffffff65;
     cursor: pointer;
 }
-.userComment-div{
+
+.userComment-div {
     display: flex;
     flex-direction: column;
-    margin: 1rem;
+    margin-bottom: 0.5rem;
     padding: 0.5rem;
     border-radius: 1rem;
     background: $bg;
 
-    .comment-div{
+    .comment-div {
         display: flex;
     }
-    
-    .comments{
+
+    .comments {
         font-size: 14px;
         margin-top: 0.5rem;
     }
-    h5{
+
+    h5 {
         font-size: 14px;
     }
-    .comment-img{
+
+    .comment-img {
         width: 30px;
         height: 30px;
         border-radius: 50%;
         object-fit: cover;
     }
-    .comment-name{
+
+    .comment-name {
         font-size: 14px;
     }
-    .close-btn-comment{
+
+    .close-btn-comment {
         flex: 1;
         display: flex;
         justify-content: end;
@@ -194,7 +245,7 @@
     overflow: auto;
     box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
     z-index: 1;
-   
+
 }
 
 .dropdown-content a {
@@ -204,7 +255,7 @@
     text-decoration: none;
     display: block;
 
-    &:hover{
+    &:hover {
         background: #0a1929;
     }
 }
@@ -216,6 +267,7 @@
 .show {
     display: block;
 }
+
 .hide {
-    display:none;
+    display: none;
 }

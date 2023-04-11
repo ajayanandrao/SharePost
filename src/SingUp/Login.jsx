@@ -18,6 +18,7 @@ const Login = () => {
         auth.onAuthStateChanged((user) => {
             if (user) {
                 nav("/home")
+                // return (<a href="https://google.com"></a>)
             } else {
                 nav("/")
             }
