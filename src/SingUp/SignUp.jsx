@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import "./SingUp.scss";
 import f from "./../Image/img/ff.png";
 import g from "./../Image/img/gg.png";
@@ -6,10 +6,11 @@ import t from "./../Image/img/tt.png";
 import i from "./../Image/img/ic.png";
 
 import { Link, useNavigate } from "react-router-dom";
-import { collection, addDoc, getDocs, onSnapshot, setDoc, doc, } from "firebase/firestore";
+import { collection, addDoc, getDocs, onSnapshot, setDoc, doc, getDoc, } from "firebase/firestore";
 import { ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
 import { createUserWithEmailAndPassword, signOut, updateProfile } from "firebase/auth";
 import { auth, db, storage } from '../firebase';
+import { AuthContext } from '../AuthContaxt';
 
 const SignUp = () => {
 
@@ -20,6 +21,8 @@ const SignUp = () => {
 
     const colRef = collection(db, "users");
 
+    const { currentuser } = useContext(AuthContext);
+
     useEffect(() => {
         const unsub = onSnapshot(colRef, (snapshot) => {
             const arry = [];
@@ -27,6 +30,7 @@ const SignUp = () => {
         });
         return unsub;
     }, []);
+
 
     const submit = async (e) => {
         e.preventDefault();
@@ -68,7 +72,25 @@ const SignUp = () => {
                             // bytime: serverTimestamp(),
                         });
 
-                        setDoc(doc(db, "userPostsList", res.user.uid), { messages: [] })
+                        setDoc(doc(db, "userPostsList", res.user.uid), { messages: [] });
+
+                        const profileDataRef = doc(db, "UpdateProfile", res.user.uid);
+
+                        await setDoc(profileDataRef, {
+                            name: name,
+                            CoverPhoto: "",
+                            userPhoto: downloadURL,
+
+                            FirstName: "First Name",
+                            LastName: "Last Name",
+                            
+                            Address: "No Address to show ",
+                            MobileNumber: "No Mobile Number to show",
+                            UserName: 'no user name to show ',
+                            CoverPhoto: "",
+                            uid: currentuser.uid,
+                        });
+
                     });
                 }
             );
@@ -151,7 +173,6 @@ const SignUp = () => {
                         <p>
                             Have an account ? <Link to="/">Login</Link>
                         </p>
-                        <a href="https://google.com">ajay</a>
                         <p>or sign up with:</p>
 
                         <button type="button" className="btn btn-floating mx-3">

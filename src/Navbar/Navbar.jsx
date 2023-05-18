@@ -2,13 +2,15 @@ import "./Navbar.scss";
 // import aj from "./../../img/203.png";
 import { RiHomeFill, RiSearchFill } from "react-icons/ri";
 import { IoLogOut } from "react-icons/io5";
-import { auth } from "../firebase";
+import { auth, db } from "../firebase";
 import { signOut, updateProfile } from "firebase/auth";
 import { BsFillHeartFill, BsMessenger } from "react-icons/bs";
 import { RxHamburgerMenu } from "react-icons/rx";
 import { Link, useNavigate } from "react-router-dom";
 import { useContext, useEffect, useState } from "react";
 import { AuthContext } from "../AuthContaxt";
+import { collection, doc, getDoc, onSnapshot } from "firebase/firestore";
+import { Avatar } from "@mui/material";
 
 const openNav = () => {
   document.getElementById("mySidenav").style.width = "230px";
@@ -19,8 +21,18 @@ const closeNav = () => {
 };
 
 const Navbar = () => {
+
   const nav = useNavigate();
   const { currentuser } = useContext(AuthContext);
+
+  const dataRef = collection(db, "users");
+  const [userPhoto, setUserPhoto] = useState(null);
+  useEffect(() => {
+    const unsub = onSnapshot(dataRef, (snapshot) => {
+      setUserPhoto(snapshot.docs.map((doc) => ({ ...doc.data(), id: doc.id })));
+    });
+    return unsub;
+  }, []);
 
   useEffect(() => {
     const unsub = auth.onAuthStateChanged((user) => {
@@ -45,28 +57,11 @@ const Navbar = () => {
     nav("/");
   };
 
-  const update = () => {
-    updateProfile(auth.currentUser, {
-      displayName: "Jane Q. User",
-      photoURL: "https://example.com/jane-q-user/profile.jpg",
-    })
-      .then(() => {
-        // Profile updated!
-        // ...
-      })
-      .catch((error) => {
-        // An error occurred
-        // ...
-      });
-  };
+  const [search, setSearch] = useState("");
 
-  const [nimg, setNimg] = useState(null);
-
-
-  
   return (
     <>
-      <div className="navbartop" style={{display:"none"}} id="navId" >
+      <div className="navbartop" style={{ display: "none" }} id="navId" >
         <div className="container-fluid al-center">
           <RxHamburgerMenu className="navbar-lines" onClick={openNav} />
           <div className="navbar-name">
@@ -142,8 +137,10 @@ const Navbar = () => {
             <div className="navbar-search-c">
               <input
                 type="text"
-                placeholder="Search"
+                placeholder="Search friends..."
                 className="navbar-search"
+                onChange={(e) => setSearch(e.target.value)}
+                value={search}
               />
               <RiSearchFill className="nav-icon" />
             </div>
@@ -199,7 +196,7 @@ const Navbar = () => {
         </div>
       </div>
 
-      
+
     </>
   );
 };

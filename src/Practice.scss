@@ -1,0 +1,140 @@
+@import "./Styles/Mixin.scss";
+@import "./Styles/Variable";
+
+
+.video-container {
+    position: relative;
+    width: 80%;
+    height: 550px;
+    overflow: hidden;
+    border-radius: 0.5rem;
+
+    video {
+        border-radius: 0.5rem;
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        cursor: pointer;
+    }
+
+    .play-button {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        font-size: 18px;
+        color: white;
+        cursor: pointer;
+        z-index: 0;
+
+        &:hover {
+            opacity: 0.8;
+        }
+    }
+
+
+}
+
+
+@include mobile {
+    .video-container {
+        position: relative;
+        width: 100%;
+        height: 550px;
+    }
+}
+
+// ==========
+.pinkBg {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    // background-color: #ed184f!important;
+    // background-color: #ed184f !important;
+    // background-image: linear-gradient(40deg, #8904B1, #753a88);
+
+    background-color: #ed184f !important;
+    background-image: linear-gradient(60deg, #B4045F, #fd8b55);
+
+
+    &:hover {
+        color: white;
+    }
+
+    cursor: pointer;
+}
+
+.intro-banner-vdo-play-btn {
+    width: 40px;
+    height: 40px;
+    position: absolute;
+    top: 50%;
+    left: 55%;
+    text-align: center;
+    margin: -40px 0 0 -30px;
+    border-radius: 100px;
+    z-index: 0;
+}
+
+.intro-banner-vdo-play-btn i {
+    // line-height:56px;
+    font-size: 14px;
+}
+
+.intro-banner-vdo-play-btn .ripple {
+    position: absolute;
+    width: 80px;
+    height: 80px;
+    z-index: -1;
+    left: 100%;
+    top: 100%;
+    opacity: 0;
+    margin: -60px 0 0 -60px;
+    border-radius: 100px;
+    -webkit-animation: ripple 1.8s infinite;
+    animation: ripple 1.8s infinite
+}
+
+
+
+
+@-webkit-keyframes ripple {
+    0% {
+        opacity: 1;
+        -webkit-transform: scale(0);
+        transform: scale(0)
+    }
+
+    100% {
+        opacity: 0;
+        -webkit-transform: scale(1);
+        transform: scale(1)
+    }
+}
+
+@keyframes ripple {
+    0% {
+        opacity: 1;
+        -webkit-transform: scale(0);
+        transform: scale(0)
+    }
+
+    100% {
+        opacity: 0;
+        -webkit-transform: scale(1);
+        transform: scale(1)
+    }
+}
+
+// .intro-banner-vdo-play-btn .ripple:nth-child(2) {
+//     animation-delay: .3s;
+//     -webkit-animation-delay: .3s
+// }
+
+.intro-banner-vdo-play-btn .ripple:nth-child(3) {
+    animation-delay: .6s;
+    -webkit-animation-delay: .6s
+}

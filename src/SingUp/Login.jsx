@@ -6,6 +6,7 @@ import i from "./../Image/img/ic.png";
 import { Link, useNavigate } from 'react-router-dom';
 import { signInWithEmailAndPassword } from 'firebase/auth';
 import { auth } from '../firebase';
+import NewNavbar from '../NewNavbar/NewNavbar';
 
 const Login = () => {
 
@@ -62,8 +63,9 @@ const Login = () => {
     };
     return (
         <>
+            {/* <NewNavbar/> */}
             <div className="form-width">
-                <h2 className='text-center my-5'>Login Page</h2>
+                <h2 className='text-center login-text my-5'>Login Page</h2>
                 <form >
         
                     <div id='error' className='error-div' style={{ display: "none" }}> </div>

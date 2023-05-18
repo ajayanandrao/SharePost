@@ -29,7 +29,9 @@
 .animate {
     animation: heart-burst .8s steps(28) forwards;
 }
-
+.wrapper{
+    // display: none;
+}
 @keyframes heart-burst {
     0% {
         background-position: left
@@ -65,7 +67,7 @@
 
         .Feed-Profile-name {
             margin-left: 1rem;
-            font-size: 16px;
+            font-size: 14px;
         }
 
         .Feed-Profile-Option-Container {
@@ -93,7 +95,7 @@
         width: 100%;
 
         .Feed-Post-Text {
-            font-size: 14px;
+            font-size: 16px;
             padding: 0 1rem;
             line-height: 18px;
         }
@@ -104,7 +106,7 @@
 
             .Feed-Post-img {
                 width: 100%;
-                max-height: 400px;
+                max-height: 450px;
                 object-fit: contain;
             }
         }

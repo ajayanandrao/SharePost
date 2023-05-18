@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import "./Feed.scss";
 import { BsFillHeartFill, BsHeart, BsHeartFill } from "react-icons/bs";
 import { RxDotsVertical } from "react-icons/rx";
@@ -13,13 +13,13 @@ import { getDownloadURL, ref, uploadBytes } from 'firebase/storage';
 import photo from "./../Image/img/photo.png";
 import FlipMove from 'react-flip-move';
 import { current } from '@reduxjs/toolkit';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 
 import { RiHeart2Fill } from 'react-icons/ri'
 import $ from 'jquery';
 
 const Feed = ({ post, CurrentUser }) => {
-const [isClick, setClick] = useState(false);
+  const [isClick, setClick] = useState(false);
 
   const [editInput, setEditInput] = useState('');
   const [EditImg, setEditImg] = useState(null);
@@ -201,16 +201,37 @@ const [isClick, setClick] = useState(false);
     setAnimate(!animate);
   };
 
+  const navigate = useNavigate()
+  const handleUserClick = (id) => {
+    navigate(`/users/${id}`);
+  };
+  const [isPlaying, setIsPlaying] = useState(false);
+  const videoRef = useRef(null);
+
+  const handleVideoBtnClick = () => {
+    const video = videoRef.current;
+    if (video.paused) {
+      video.play();
+      setIsPlaying(true);
+    } else {
+      video.pause();
+      setIsPlaying(false);
+    }
+  };
+  
+
   return (
     <>
       <div className='div-center'>
         <div className='Feed-Card-Container' id={post.id}>
           <div className='Feed-card-div' id='d'>
             <div className='Feed-Section-One'>
-              <Link style={{ display: "flex", alignItems: "center", color: "white" }} to="/profile">
+
+              <div onClick={(e) => handleUserClick(post.uid)} style={{ display: "flex", cursor: "pointer", alignItems: "center", color: "white" }} >
                 <img src={post.photoURL} className='Feed-Profile-img' alt='' />
                 <div className='Feed-Profile-name'>{post.displayName}</div>
-              </Link>
+              </div>
+
               <div
                 className='timeago ms-3'
                 style={{
@@ -316,11 +337,34 @@ const [isClick, setClick] = useState(false);
 
               </div>
 
-              <div className='Feed-Post-Text'>{post.name}</div>
+              <div className='Feed-Post-Text'>{post.postText}</div>
+
 
               <div className='Feed-Post-img-Container mt-3'>
-                <img className='Feed-Post-img' src={post.img} alt='' />
+                {/* <img className='Feed-Post-img' src={post.img} alt='' /> */}
+
+
+                {post.img && (post.name.includes('.jpg') || post.name.includes('.png')) ? (
+                  <img width={"300px"} src={post.img} alt="Uploaded" className="Feed-Post-img image" />
+                ) : post.img ? (
+                  <div className="video-container">
+                    <video ref={videoRef} className="video" onClick={handleVideoBtnClick}>
+                      <source src={post.img} type="video/mp4" />
+                    </video>
+                    {!isPlaying && (
+                      <a class="intro-banner-vdo-play-btn pinkBg" onClick={handleVideoBtnClick} target="_blank">
+                        <div className="play-button" >
+                          <i className="fas fa-play"></i>
+                        </div>
+                        <span class="ripple pinkBg"></span>
+                        <span class="ripple pinkBg"></span>
+                        <span class="ripple pinkBg"></span>
+                      </a>
+                    )}
+                  </div>
+                ) : null}
               </div>
+
             </div>
 
 
@@ -328,13 +372,13 @@ const [isClick, setClick] = useState(false);
 
 
               <div className='Feed-Comment-Section-div'>
-                <div  className='feed-comment-section-inner' onClick={() => Heart(post.id)} >
+                <div className='feed-comment-section-inner' onClick={() => Heart(post.id)} >
 
                   {liked ? (<div className={`HeartAnimation${' animate'}`} >
                   </div>) : (<div className={`HeartAnimation${animate ? '' : ''}`} >
                   </div>)}
 
-                  <div className='like-count ms-2' style={{fontSize:"14px"}}>{like.length > 0 && (<>{like.length}</>)}</div>
+                  <div className='like-count ms-2' style={{ fontSize: "14px" }}>{like.length > 0 && (<>{like.length}</>)}</div>
                 </div>
 
 

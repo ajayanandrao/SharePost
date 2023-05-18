@@ -1,0 +1,274 @@
+@import "./../../Styles/Variable";
+@import "./../../Styles/Mixin.scss";
+
+@import "./../../Styles/Mixin_New.scss";
+
+
+.profile-user-div {
+
+    width: 100%;
+    height: 140px;
+    // background:darkslategrey;
+    display: flex;
+    position: relative;
+
+    @include respond-to(sm) {
+        height: 120px;
+    }
+
+    @include respond-to(xs) {
+        height: 80px;
+    }
+
+    .profile-user-container {
+        display: flex;
+        // background: red;
+        width: 950px;
+        margin: 0 auto;
+        @include respond-to(xs) {
+            width: 100%;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+        @include respond-to(sm) {
+            width: 600px;
+        }
+        @include respond-to(md) {
+            width: 700px;
+            // display: none;
+        }
+      
+        .profile-user-img-container {
+            width: 150px;
+            height: 150px;
+            border-radius: 20%;
+            padding: 0 1rem;
+
+            @include respond-to(sm) {
+                width: 120px;
+                height: 120px;
+            }
+
+            @include respond-to(xs) {
+                width: 90px;
+                height: 90px;
+                
+            }
+
+            .profile-user-img {
+                position: absolute;
+                top: -35%;
+                background-position: center;
+                background-repeat: no-repeat;
+                background-size: cover;
+                width: 150px;
+                height: 150px;
+                border-radius: 20%;
+                box-shadow: rgb(38, 57, 77) 0px 20px 30px -10px;
+                cursor: pointer;
+                overflow: hidden;
+                display: flex;
+                justify-content: end;
+                align-items: end;
+
+                @include respond-to(sm) {
+                    width: 120px;
+                    height: 120px;
+                    // margin-top: -25;
+                }
+
+                @include respond-to(xs) {
+                    width: 90px;
+                    height: 90px;
+                    top: -120px;
+                }
+
+                &:hover {
+                    .profile-img-select-div {
+                        height: 90%;
+
+                    }
+                }
+
+                .profile-img-select-div {
+                    width: 100%;
+                    height: 0px;
+                    background: rgba(0, 0, 0, 0.637);
+                    border-radius: 20%;
+                    transition: 0.3s ease-in-out;
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
+                    padding: 0;
+
+                    &:hover {
+                        .profile-img-camera {
+                            // width: 100%;
+                            height: 100%;
+                        }
+                    }
+
+                    .profile-img-camera {
+                        height: 30%;
+                        font-size: 30px;
+                        transition: 0.2s ease-in-out;
+                    }
+                }
+            }
+
+        }
+    }
+
+    .profile-user-img {
+        width: 150px;
+        height: 150px;
+        object-fit: cover;
+        margin-bottom: 100px;
+        border-radius: 20%;
+        // box-shadow: rgb(38, 57, 77) 0px 20px 30px -10px;
+        cursor: pointer;
+    }
+
+    .profile-name-div {
+        display: flex;
+        align-items: center;
+        // background: red;
+        margin-left: 30px;
+        margin-bottom: 30px;
+
+        // @include respond-to(xs){
+        //     // margin-bottom: 0;
+        //     // margin-left: 0;
+        //     margin: 1rem ;
+        // }
+
+        .profile-user-name {
+            font-weight: 600;
+            font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+            text-transform: capitalize;
+        }
+
+        .profile-pen-div {
+            width: 45px;
+            height: 45px;
+            // background: red;
+            margin-left: 30px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            border-radius: 100%;
+            border: 1px solid $border-div;
+            cursor: pointer;
+            padding: 0;
+
+            @include respond-to (xs) {
+                width: 35px;
+                height: 35px;
+            }
+
+            .profile-pen {
+                font-size: 25px;
+
+                @include respond-to (xs) {
+                 font-size: 20px;
+                }
+            }
+        }
+
+    }
+
+
+}
+
+//============================================================================
+
+#UserNameUpdate {
+    position: fixed;
+    display: none;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 2;
+}
+
+.overlay-center {
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.overlay-card {
+    width: 400px;
+    height: 300px;
+    background: $bg-div;
+    backdrop-filter: blur(15px);
+    display: flex;
+    flex-direction: column;
+    border: 1px solid $link;
+    box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.1);
+    border-radius: 0.5rem;
+
+    .card-inner-div {
+        height: 100%;
+        display: flex;
+        justify-content: end;
+        align-items: center;
+        flex-direction: column;
+        padding-bottom: 3rem;
+
+        .card-inner-img {
+            width: 70px;
+            height: 70px;
+            object-fit: cover;
+            border-radius: 100%;
+        }
+
+        .new-input {
+            width: 280px;
+            height: 40px;
+            border-radius: 1.5rem;
+            background: $bg;
+            color: white;
+            border: none;
+        }
+
+        .save {
+            text-align: center;
+        }
+    }
+
+    .current-username {
+        margin: 15px 0;
+        text-align: center;
+        text-transform: capitalize;
+    }
+
+
+    .btn-colse-div {
+        display: flex;
+        justify-content: end;
+
+        .close-btn {
+            width: 25px;
+            height: 25px;
+            border-radius: 100%;
+            // background:$btn;
+            // border: 1px solid $link;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 0;
+            cursor: pointer;
+        }
+    }
+
+
+}
+
+//================================================
