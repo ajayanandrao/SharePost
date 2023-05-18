@@ -219,8 +219,13 @@ const Post = () => {
             </div>
 
             <div className="post-category-contaner">
-              <img src={video} className="post-cat-img" />
-              <span className="post-cat-title">Video</span>
+              <label htmlFor="p" onClick={Wrapp} style={{ cursor: "pointer" }}>
+
+                <input type="file" id="p" accept="video/*" onChange={(e) => setImg(e.target.files[0])} style={{ display: "none" }} />
+
+                <img src={video} className="post-cat-img" />
+                <span className="post-cat-title">Video</span>
+              </label>
             </div>
 
             <div onClick={Emoji} className="post-category-contaner">

@@ -70,12 +70,16 @@ const Feed = ({ post, CurrentUser }) => {
   }
 
   function off(id) {
-    document.getElementById(`overlay-${id}`).style.display = 'none'
+    document.getElementById(`overlay-${id}`).style.display = 'none';
+    setEditImg(null);
   }
 
   const done = async (id) => {
     setUpdating(true);
     const postRef = doc(db, 'AllPosts', id);
+    if (!editInput) {
+      return
+    }
     if (EditImg) {
       // If a new image is provided, upload it to storage and update the document
       const storageRef = ref(storage, `Post/${EditImg.name}`);
@@ -84,13 +88,13 @@ const Feed = ({ post, CurrentUser }) => {
       const imageUrl = await getDownloadURL(storageRef);
 
       await updateDoc(postRef, {
-        name: editInput,
+        postText: editInput,
         img: imageUrl
       });
     } else {
       // If no new image is provided, only update the name field
       await updateDoc(postRef, {
-        name: editInput
+        postText: editInput
       });
     }
     setEditInput("");
@@ -218,7 +222,7 @@ const Feed = ({ post, CurrentUser }) => {
       setIsPlaying(false);
     }
   };
-  
+
 
   return (
     <>
@@ -300,7 +304,7 @@ const Feed = ({ post, CurrentUser }) => {
                         type='text'
                         className='edit-input'
                         placeholder='edit post'
-                        onChange={e => setEditInput(e.target.value)}
+                        onChange={(e) => setEditInput(e.target.value)}
                         value={editInput}
                         id={`editInput-${post.id}`}
                       />
@@ -310,6 +314,25 @@ const Feed = ({ post, CurrentUser }) => {
                     <div className='thurd-section-edit'>
                       <label htmlFor="EditImg">
                         <img className="postImg" src={EditImg ? URL.createObjectURL(EditImg) : "item.img"} alt="" />
+
+
+                        {EditImg && EditImg.type.startsWith('image/') && (
+                          <img className="postImg" src={URL.createObjectURL(EditImg)} alt="" />
+                        )}
+
+                        {EditImg && EditImg.type.startsWith('video/') && (
+                          <div className="video-container_">
+                            <video width={"300px"} height={"250px"} ref={videoRef} onClick={handleClick} className="video_ ">
+                              <source src={URL.createObjectURL(EditImg)} type={EditImg.type} />
+                            </video>
+                            {!isPlaying && (
+                              <div className="play-button_" onClick={handleClick}>
+                                {/* <i className="fas fa-play"></i> */}
+                              </div>
+                            )}
+                          </div>
+                        )}
+
 
                         <div className='overlay-set-photos'>
                           <img className='photo-img me-2' style={{ width: "25px" }} src={photo} alt="" /> Photos
@@ -321,7 +344,7 @@ const Feed = ({ post, CurrentUser }) => {
                     <div className='forth-section-edit'>
                       <button
                         className='btn btn-success btn-sm w-25'
-                        onClick={() => done(post.id)}
+                        onClick={(e) => done(post.id)}
                       >
                         Update
                       </button>
@@ -330,7 +353,7 @@ const Feed = ({ post, CurrentUser }) => {
 
                     <input type="file" id='EditImg'
                       onChange={(e) => setEditImg(e.target.files[0])}
-                      style={{ display: "none" }} />
+                      style={{ display: "none" }} accept="image/*, video/*" />
 
                   </div>
                 </div>
