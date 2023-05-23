@@ -6,7 +6,7 @@ import { VscChromeClose, VscHeart } from "react-icons/vsc";
 import { FaCommentDots } from "react-icons/fa";
 import { IoMdClose, IoMdShareAlt } from "react-icons/io";
 import { IoMdSend } from "react-icons/io";
-import { addDoc, collection, deleteDoc, doc, onSnapshot, serverTimestamp, setDoc, updateDoc } from 'firebase/firestore';
+import { addDoc, collection, deleteDoc, doc, onSnapshot, orderBy, query, serverTimestamp, setDoc, updateDoc } from 'firebase/firestore';
 import { db, storage } from '../firebase';
 import { getDownloadURL, ref, uploadBytes } from 'firebase/storage';
 
@@ -17,6 +17,11 @@ import { Link, useNavigate } from 'react-router-dom';
 
 import { RiHeart2Fill } from 'react-icons/ri'
 import $ from 'jquery';
+import moment from 'moment/moment';
+import ReactTimeago from 'react-timeago';
+import TimeAgo from 'react-timeago';
+import englishStrings from 'react-timeago/lib/language-strings/en';
+import buildFormatter from 'react-timeago/lib/formatters/buildFormatter';
 
 const Feed = ({ post, CurrentUser }) => {
   const [isClick, setClick] = useState(false);
@@ -133,33 +138,40 @@ const Feed = ({ post, CurrentUser }) => {
 
 
   const HandleComment = async (e, id) => {
-    e.preventDefault()
+    e.preventDefault();
 
-    await addDoc(collection(db, "AllPosts", id, "comments"), {
+    await addDoc(collection(db, 'AllPosts', id, 'comments'), {
       comment: getComment,
       displayName: CurrentUser.displayName,
       photoURL: CurrentUser.photoURL,
-      timestamp: serverTimestamp(),
-      uid: CurrentUser.uid
-    })
+      uid: CurrentUser.uid,
+      commentTime: serverTimestamp(),
+    });
 
-    setComment("");
+    setComment('');
   };
+
+
   const [commentCount, setCommentCount] = useState(0);
 
   useEffect(() => {
-    const sub = onSnapshot(collection(db, "AllPosts", post.id, "comments"), (snap) => {
-      setNewComment(
-        snap.docs.map((snap) => ({
-          id: snap.id,
-          ...snap.data(),
-        }))
-      );
-      setCommentCount(snap.docs.length);
-    });
-    return () => {
-      sub();
-    };
+    const unsubscribe = onSnapshot(
+      query(
+        collection(db, 'AllPosts', post.id, 'comments'),
+        orderBy('commentTime', 'desc')
+      ),
+      (snap) => {
+        setNewComment(
+          snap.docs.map((snap) => ({
+            id: snap.id,
+            ...snap.data(),
+          }))
+        );
+        setCommentCount(snap.docs.length);
+      }
+    );
+
+    return unsubscribe;
   }, [post.id]);
 
 
@@ -168,7 +180,7 @@ const Feed = ({ post, CurrentUser }) => {
     deleteDoc(CommentRf);
   };
 
-
+  const formatter = buildFormatter(englishStrings);
   const userComment = newComment.map((item) => {
 
     return (
@@ -181,6 +193,14 @@ const Feed = ({ post, CurrentUser }) => {
           </div>
         </div>
         <div className="comments">{item.comment}</div>
+        {/* <TimeAgo date={item.commentTime.toDate()} /> */}
+        {item.commentTime && (
+          <TimeAgo className='timeago mt-3'
+            style={{
+              fontSize: '12px',
+              color: 'rgba(255, 255, 255, 0.5)'
+            }} date={item.commentTime.toDate()} formatter={formatter} />
+        )}
       </div>
     )
   });
@@ -223,6 +243,9 @@ const Feed = ({ post, CurrentUser }) => {
     }
   };
 
+  function TimeAgoComponent({ timestamp }) {
+    return <ReactTimeago date={timestamp} />;
+  }
 
   return (
     <>
@@ -243,7 +266,7 @@ const Feed = ({ post, CurrentUser }) => {
                   color: 'rgba(255, 255, 255, 0.5)'
                 }}
               >
-
+                <TimeAgoComponent timestamp={post.bytime && post.bytime.toDate()} />
               </div>
 
               <div className='Feed-Profile-Option-Container'>
@@ -370,6 +393,7 @@ const Feed = ({ post, CurrentUser }) => {
                 {post.img && (post.name.includes('.jpg') || post.name.includes('.png')) ? (
                   <img width={"300px"} src={post.img} alt="Uploaded" className="Feed-Post-img image" />
                 ) : post.img ? (
+
                   <div className="video-container">
                     <video ref={videoRef} className="video" onClick={handleVideoBtnClick}>
                       <source src={post.img} type="video/mp4" />
@@ -385,6 +409,8 @@ const Feed = ({ post, CurrentUser }) => {
                       </a>
                     )}
                   </div>
+
+
                 ) : null}
               </div>
 
@@ -401,7 +427,9 @@ const Feed = ({ post, CurrentUser }) => {
                   </div>) : (<div className={`HeartAnimation${animate ? '' : ''}`} >
                   </div>)}
 
-                  <div className='like-count ms-2' style={{ fontSize: "14px" }}>{like.length > 0 && (<>{like.length}</>)}</div>
+                  <div className='like-count' style={{ fontSize: "14px" }}>
+                    {like.length > 0 && (<>{like.length}</>)}
+                  </div>
                 </div>
 
 
@@ -414,6 +442,8 @@ const Feed = ({ post, CurrentUser }) => {
                   className='react-icons'
                 />
                 <span className='ms-2'>{commentCount > 0 && commentCount}</span>
+
+
               </div>
 
 
@@ -430,7 +460,7 @@ const Feed = ({ post, CurrentUser }) => {
               id={`comment-${post.id}`}
               style={{ display: 'none' }}
             >
-              <hr />
+              <hr className='feed-hr' />
               <div className='feed-comment-div-one'>
                 <input
                   type='text'
@@ -455,6 +485,7 @@ const Feed = ({ post, CurrentUser }) => {
                 <div className='see-com' onClick={toggleVisibility}>see com..</div>
               </div>
               {isVisible && <div>{userComment}</div>}
+
             </div>
           </div>
         </div>

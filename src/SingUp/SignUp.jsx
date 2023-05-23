@@ -81,13 +81,13 @@ const SignUp = () => {
                             CoverPhoto: "",
                             userPhoto: downloadURL,
 
-                            FirstName: "First Name",
-                            LastName: "Last Name",
+                            FirstName: "",
+                            LastName: "",
                             
-                            Address: "No Address to show ",
-                            MobileNumber: "No Mobile Number to show",
-                            UserName: 'no user name to show ',
-                            CoverPhoto: "",
+                            Address: "",
+                            // MobileNumber: "No Mobile Number to show",
+                            // UserName: 'no user name to show ',
+                            
                             uid: currentuser.uid,
                         });
 

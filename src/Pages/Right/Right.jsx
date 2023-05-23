@@ -41,7 +41,8 @@ const Right = () => {
         console.log(id)
     };
 
-    const navigate = useNavigate()
+    const navigate = useNavigate();
+
     const handleUserClick= (id) => {
         navigate(`/users/${id}`);
     };

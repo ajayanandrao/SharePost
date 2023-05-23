@@ -14,6 +14,7 @@ import { useCollectionData } from 'react-firebase-hooks/firestore';
 import { db } from '../firebase';
 import { AuthContext } from '../AuthContaxt';
 import NHome from './NHome';
+import Facebook from '../Facebook';
 
 const Home = () => {
 
@@ -58,6 +59,7 @@ const Home = () => {
     return (
       <div key={item.id}>
         <Feed CurrentUser={currentUser} post={item} />
+        {/* <Facebook post={item}/> */}
       </div>
     );
   });

@@ -95,7 +95,7 @@ const Navbar = () => {
 
             <hr />
             <div className="nav-link">
-              <Link to="/card" onClick={closeNav} className="a">
+              <Link to="/" onClick={closeNav} className="a">
                 <span className="icon-c">
                   <RiHomeFill className="nav-icon" /> Home
                 </span>

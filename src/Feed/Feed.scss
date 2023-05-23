@@ -29,9 +29,11 @@
 .animate {
     animation: heart-burst .8s steps(28) forwards;
 }
-.wrapper{
+
+.wrapper {
     // display: none;
 }
+
 @keyframes heart-burst {
     0% {
         background-position: left
@@ -48,8 +50,8 @@
     border-radius: 0.5rem;
     box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.1);
     margin: 0.5rem 0;
-    padding-bottom: 0.5rem;
-    border: 1px solid $link;
+    // padding-bottom: 0.5rem;
+    border: 1px solid $link; 
 
     .Feed-Section-One {
         display: flex;
@@ -103,6 +105,8 @@
         .Feed-Post-img-Container {
             display: flex;
             justify-content: center;
+            background: rgb(0, 0, 0);
+            backdrop-filter: 10px;;
 
             .Feed-Post-img {
                 width: 100%;
@@ -117,7 +121,6 @@
         display: flex;
         align-items: center;
         justify-content: space-between;
-        margin: 0.5rem 0;
         padding: 0 1rem;
 
         .Feed-Comment-Section-div {
@@ -128,9 +131,9 @@
                 align-items: center;
                 position: relative;
 
-                .like-count{
+                .like-count {
                     position: absolute;
-                    left: 35px;
+                    // left: 35px;
                 }
             }
 
@@ -146,6 +149,12 @@
         flex-direction: column;
         // align-items: center;
         padding: 0 1rem;
+
+        .feed-hr {
+            margin: 0;
+            margin-bottom: 0.5rem;
+
+        }
 
         .feed-comment-div-one {
             margin-bottom: 1rem;

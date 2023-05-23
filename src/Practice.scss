@@ -7,10 +7,10 @@
     width: 80%;
     height: 550px;
     overflow: hidden;
-    border-radius: 0.5rem;
+    // border-radius: 0.5rem;
 
     video {
-        border-radius: 0.5rem;
+        // border-radius: 0.5rem;
         position: absolute;
         top: 0;
         left: 0;
@@ -52,13 +52,9 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    // background-color: #ed184f!important;
+ 
     // background-color: #ed184f !important;
-    // background-image: linear-gradient(40deg, #8904B1, #753a88);
-
-    background-color: #ed184f !important;
-    background-image: linear-gradient(60deg, #B4045F, #fd8b55);
-
+    // background-image: linear-gradient(60deg, #B4045F, #fd8b55);
 
     &:hover {
         color: white;
@@ -71,6 +67,7 @@
     width: 40px;
     height: 40px;
     position: absolute;
+    // background: rgba(0, 0, 0, 0.404);
     top: 50%;
     left: 55%;
     text-align: center;
@@ -81,7 +78,7 @@
 
 .intro-banner-vdo-play-btn i {
     // line-height:56px;
-    font-size: 14px;
+    font-size: 34px;
 }
 
 .intro-banner-vdo-play-btn .ripple {
