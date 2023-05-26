@@ -17,15 +17,11 @@ import { Link, useNavigate } from 'react-router-dom';
 
 import { RiHeart2Fill } from 'react-icons/ri'
 import $ from 'jquery';
-<<<<<<< HEAD
-// import moment from 'moment/moment';
-=======
-import moment from 'moment/moment';
->>>>>>> de4cc00f3462f5e042bd3a1556cba3692eb502a0
 import ReactTimeago from 'react-timeago';
 import TimeAgo from 'react-timeago';
 import englishStrings from 'react-timeago/lib/language-strings/en';
 import buildFormatter from 'react-timeago/lib/formatters/buildFormatter';
+import Picker from '@emoji-mart/react';
 
 const Feed = ({ post, CurrentUser }) => {
   const [isClick, setClick] = useState(false);
@@ -40,6 +36,8 @@ const Feed = ({ post, CurrentUser }) => {
   const [like, setLike] = useState([]);
   const [liked, setLiked] = useState(false);
 
+  const [isliked, setIsliked] = useState([]);
+
   const [online, setSetOnline] = useState([]);
   const [onlined, setOnlined] = useState(false);
 
@@ -51,6 +49,24 @@ const Feed = ({ post, CurrentUser }) => {
       unsub();
     };
   }, [post.id]);
+
+  useEffect(() => {
+    const unsubscribe = onSnapshot(
+      query(collection(db, 'AllPosts', post.id, 'likes')),
+      (snapshot) => {
+        setIsliked(
+          snapshot.docs.map((doc) => ({
+            id: doc.id,
+            ...doc.data(),
+          }))
+        );
+        // Log the uid property of each document
+      }
+    );
+
+    return unsubscribe;
+  }, [post.id]);
+
 
   useEffect(() => {
     setLiked(like.findIndex((like) => like.id === CurrentUser?.uid) !== -1);
@@ -138,10 +154,24 @@ const Feed = ({ post, CurrentUser }) => {
 
 
   function comment(id) {
-    const element = document.getElementById(`comment-${id}`)
+    const element = document.getElementById(`comment-${id}`);
+    const like = document.getElementById(`showliked-${id}`)
+
+    if (element.style.display === 'none') {
+      like.style.display = 'none';
+      element.style.display = 'flex'
+    } else {
+      element.style.display = 'none'
+    }
+  }
+
+  function showLike(id) {
+    const element = document.getElementById(`showliked-${id}`)
+    const comment = document.getElementById(`comment-${id}`);
 
     if (element.style.display === 'none') {
       element.style.display = 'flex'
+      comment.style.display = 'none';
     } else {
       element.style.display = 'none'
     }
@@ -150,7 +180,10 @@ const Feed = ({ post, CurrentUser }) => {
 
   const HandleComment = async (e, id) => {
     e.preventDefault();
-
+    if (!getComment) {
+      return
+    }
+    setShowEmoji(false)
     await addDoc(collection(db, 'AllPosts', id, 'comments'), {
       comment: getComment,
       displayName: CurrentUser.displayName,
@@ -191,8 +224,14 @@ const Feed = ({ post, CurrentUser }) => {
     deleteDoc(CommentRf);
   };
 
+  const [showAll, setShowAll] = useState(false);
+
+  const handleToggleShowAll = () => {
+    setShowAll((prevShowAll) => !prevShowAll);
+  };
+
   const formatter = buildFormatter(englishStrings);
-  const userComment = newComment.map((item) => {
+  const userComment = newComment.slice(0, showAll ? newComment.length : 3).map((item) => {
 
     return (
       <div className='userComment-div' id={`seeCom-${item.id}`} key={item.id}>
@@ -225,7 +264,7 @@ const Feed = ({ post, CurrentUser }) => {
 
   const [isVisible, setIsVisible] = useState(false);
 
-  const toggleVisibility = () => {
+  const toggleVisibility = (id) => {
     setIsVisible(!isVisible);
   };
 
@@ -257,6 +296,20 @@ const Feed = ({ post, CurrentUser }) => {
   function TimeAgoComponent({ timestamp }) {
     return <ReactTimeago date={timestamp} />;
   }
+
+  // Emoji ======================
+  const [showEmoji, setShowEmoji] = useState(false);
+  const Emoji = () => {
+    setShowEmoji(!showEmoji);
+  };
+
+  const addEmoji = (e) => {
+    let sym = e.unified.split("-")
+    let codesArray = []
+    sym.forEach((el) => codesArray.push("0x" + el));
+    let emoji = String.fromCodePoint(...codesArray);
+    setComment(getComment + emoji);
+  };
 
   return (
     <>
@@ -313,7 +366,6 @@ const Feed = ({ post, CurrentUser }) => {
                 </div>
               </div>
             </div>
-
 
             <div className='Feed-Section-Two'>
               <div
@@ -398,8 +450,6 @@ const Feed = ({ post, CurrentUser }) => {
 
 
               <div className='Feed-Post-img-Container mt-3'>
-                {/* <img className='Feed-Post-img' src={post.img} alt='' /> */}
-
 
                 {post.img && (post.name.includes('.jpg') || post.name.includes('.png')) ? (
                   <img width={"300px"} src={post.img} alt="Uploaded" className="Feed-Post-img image" />
@@ -427,61 +477,54 @@ const Feed = ({ post, CurrentUser }) => {
 
             </div>
 
+            <div className="Feed-bottom-container">
 
-            <div className='Feed-Section-three'>
+              <div className="like-container">
 
+                {liked ? (<div onClick={() => Heart(post.id)} className={`HeartAnimation${' animate'}`} >
+                </div>) : (<div onClick={() => Heart(post.id)} className={`HeartAnimation${animate ? '' : ''}`} >
+                </div>)}
 
-              <div className='Feed-Comment-Section-div'>
-                <div className='feed-comment-section-inner' onClick={() => Heart(post.id)} >
-
-                  {liked ? (<div className={`HeartAnimation${' animate'}`} >
-                  </div>) : (<div className={`HeartAnimation${animate ? '' : ''}`} >
-                  </div>)}
-
-                  <div className='like-count' style={{ fontSize: "14px" }}>
-                    {like.length > 0 && (<>{like.length}</>)}
-                  </div>
+                <div className="like-counter" onClick={() => showLike(post.id)}>
+                  {like.length > 0 && like.length}
                 </div>
-
-
 
               </div>
 
-              {/* Online */}
-
-              {/* <div onClick={handleOnline}>logOut</div> */}
-
-              {/* <div className='Feed-Comment-Section-div'>
-                <div className='feed-comment-section-inner' onClick={() => handleOnline(post.id)} >
-
-                  login
-
-                  <br />
-                  {online.length > 0 && (<>{<>online</>}</>)}
-
-                </div>
-
-              </div> */}
-
-              <div className='Feed-Comment-Section-div'>
+              <div className="Comment-container">
                 <FaCommentDots
                   onClick={() => comment(post.id)}
-                  style={{ cursor: 'pointer' }}
+                  style={{ cursor: 'pointer', fontSize: "20px" }}
                   className='react-icons'
                 />
-                <span className='ms-2'>{commentCount > 0 && commentCount}</span>
-
-
+                <span className='comment-counter ms-2' >{commentCount > 0 && commentCount}</span>
               </div>
 
-
-              <div className='Feed-Comment-Section-div'>
+              <div className="Share-container">
                 <IoMdShareAlt
-                  style={{ cursor: 'pointer' }}
-                  className='react-icons'
-                />
+                  style={{ cursor: 'pointer', fontSize: "20px" }}
+                  className='react-icons' />
               </div>
             </div>
+
+            {/* Like Section =================== */}
+
+            <div className='See-Like-div' style={{ display: 'none' }} id={`showliked-${post.id}`}>
+
+              <div className='userliked' id={`isliked${post.id}`} >
+                {isliked.map((item) => {
+                  return (
+                    <>
+                      <div className='mx-1' style={{ fontSize: "11px" }}>{item.name}</div>
+                    </>
+                  )
+
+                })}
+              </div>
+
+            </div>
+
+            {/* Comment Section ================ */}
 
             <div
               className='Feed-Comment-Div'
@@ -498,21 +541,29 @@ const Feed = ({ post, CurrentUser }) => {
                   onKeyDown={handleKey}
                 />
 
-                <span
+                <div
+                  onClick={Emoji}
                   style={{
-                    margin: '0 0.5rem',
+                    margin: '0 1.5rem',
                     fontSize: '18px',
                     cursor: 'pointer'
                   }}
                 >
                   😃
-                </span>
+                </div>
                 <IoMdSend type='submit' style={{ fontSize: '20px', cursor: 'pointer' }}
                   onClick={(e) => HandleComment(e, post.id)}
                 />
-                <div className='see-com' onClick={toggleVisibility}>see com..</div>
+                {/* <div className='see-com' onClick={toggleVisibility}>see com..</div> */}
               </div>
-              {isVisible && <div>{userComment}</div>}
+
+              {showEmoji && (<div>
+                <div className='emoji mb-3'>
+                  <Picker onEmojiSelect={addEmoji} />
+                </div>
+              </div>)}
+
+              <div className='mb-3'>{userComment}</div>
 
             </div>
           </div>

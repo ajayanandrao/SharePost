@@ -15,14 +15,14 @@
 }
 
 .HeartAnimation {
-    padding-top: 2em;
+    // padding-top: 2em;
     background-image: url('https://s3-us-west-2.amazonaws.com/s.cdpn.io/66955/web_heart_animation.png');
     background-repeat: no-repeat;
     background-size: 2900%;
     background-position: left;
     height: 60px;
     width: 60px;
-    margin: 0 auto;
+    // margin: 0 auto;
     cursor: pointer;
 }
 
@@ -51,7 +51,7 @@
     box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.1);
     margin: 0.5rem 0;
     // padding-bottom: 0.5rem;
-    border: 1px solid $link; 
+    border: 1px solid $link;
 
     .Feed-Section-One {
         display: flex;
@@ -106,7 +106,8 @@
             display: flex;
             justify-content: center;
             background: rgb(0, 0, 0);
-            backdrop-filter: 10px;;
+            backdrop-filter: 10px;
+            ;
 
             .Feed-Post-img {
                 width: 100%;
@@ -117,63 +118,115 @@
 
     }
 
-    .Feed-Section-three {
+    .Feed-bottom-container {
+        width: 100%;
         display: flex;
-        align-items: center;
-        justify-content: space-between;
-        padding: 0 1rem;
 
-        .Feed-Comment-Section-div {
-            border-radius: 50%;
-
-            .feed-comment-section-inner {
-                display: flex;
-                align-items: center;
-                position: relative;
-
-                .like-count {
-                    position: absolute;
-                    // left: 35px;
-                }
-            }
-
-            .react-icons {
-                font-size: 18px;
-            }
-        }
-    }
-
-    .Feed-Comment-Div {
-        // height: 40px;
-        display: flex;
-        flex-direction: column;
-        // align-items: center;
-        padding: 0 1rem;
-
-        .feed-hr {
-            margin: 0;
-            margin-bottom: 0.5rem;
-
-        }
-
-        .feed-comment-div-one {
-            margin-bottom: 1rem;
+        .like-container {
+            flex: 1;
             display: flex;
             align-items: center;
+
+            .like-counter {
+                margin-left: 1rem;
+                cursor: pointer;
+
+            }
+
+
         }
 
-        .Feed-Comment-Input {
-            flex-grow: 1;
-            background: none;
-            border: none;
-            color: white;
+        .Comment-container {
+            flex: 1;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            // background: blue;
+            position: relative;
 
-            &:focus {
-                outline: none;
+
+            .comment-counter {
+                position: absolute;
+                right: 15%;
+                cursor: pointer;
             }
+        }
+
+        .Share-container {
+            flex: 1;
+            padding-right: 1rem;
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
+            // background: red;
+        }
+
+    }
+
+}
+
+// .Feed-Section-three {
+//     display: flex;
+//     align-items: center;
+//     justify-content: space-between;
+//     padding: 0 1rem;
+
+
+//     .Feed-Comment-Section-div {
+//         border-radius: 50%;
+
+//         .feed-comment-section-inner {
+//             display: flex;
+//             align-items: center;
+//             position: relative;
+
+//             .like-count {
+//                 position: absolute;
+//                 // left: 35px;
+//             }
+
+//             .like-count:hover {
+//                 display: none;
+//             }
+//         }
+
+//         .react-icons {
+//             font-size: 18px;
+//         }
+//     }
+// }
+
+.Feed-Comment-Div {
+    // height: 40px;
+    display: flex;
+    flex-direction: column;
+    // align-items: center;
+    padding: 0 1rem;
+
+    .feed-hr {
+        margin: 0;
+        margin-bottom: 0.5rem;
+
+    }
+
+    .feed-comment-div-one {
+        margin-bottom: 1rem;
+        display: flex;
+        align-items: center;
+    }
+
+    .Feed-Comment-Input {
+        flex-grow: 1;
+        background: none;
+        border: none;
+        color: white;
+
+        &:focus {
+            outline: none;
         }
     }
 }
+
 
 // ====================================
 .see-com {
@@ -186,23 +239,22 @@
 .userComment-div {
     display: flex;
     flex-direction: column;
-    margin-bottom: 0.5rem;
+    margin-bottom: 0.2rem;
     padding: 0.5rem;
-    border-radius: 1rem;
+    border-radius: 0.5rem;
     background: $bg;
 
     .comment-div {
         display: flex;
+        margin-bottom: 0.5rem;
     }
 
     .comments {
         font-size: 14px;
-        margin-top: 0.5rem;
+        // margin-top: 1rem;
     }
 
-    h5 {
-        font-size: 14px;
-    }
+
 
     .comment-img {
         width: 30px;
@@ -281,4 +333,26 @@
 
 .hide {
     display: none;
+}
+
+.See-Like-div {
+    position: relative;
+    .userliked {
+        position: absolute;
+        top: -90px;
+        left: 90px;
+        width: 130px;
+        display: flex;
+        flex-direction: column;
+        // margin: 0.5rem auto;
+        // width: 95%;
+        background: linear-gradient(30deg, #286fea27, #1b49ef23);
+        backdrop-filter: blur(15px);
+        border-radius: 0.3rem;
+        padding: 0.5rem;
+        font-size: 11px;
+        line-height: 14px;
+        text-transform: capitalize;
+        border: 1px solid $link;
+    }
 }

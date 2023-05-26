@@ -1,10 +1,6 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { RxDotsVertical } from 'react-icons/rx';
-<<<<<<< HEAD
 import { collection, doc, onSnapshot, orderBy, query, setDoc } from 'firebase/firestore';
-=======
-import { collection, onSnapshot, orderBy, query } from 'firebase/firestore';
->>>>>>> de4cc00f3462f5e042bd3a1556cba3692eb502a0
 import { db } from '../../firebase';
 import { useCollectionData } from 'react-firebase-hooks/firestore';
 import { TiArrowSortedDown, TiArrowSortedUp } from "react-icons/ti";
@@ -12,22 +8,17 @@ import { AuthContext } from '../../AuthContaxt';
 import { useNavigate } from 'react-router-dom/dist';
 import "./Right.scss";
 import "./RightTwo.scss";
-<<<<<<< HEAD
 import { GoPrimitiveDot } from 'react-icons/go'
 import { Avatar } from '@mui/material';
 
 import { styled, keyframes } from '@mui/system';
 import Badge from '@mui/material/Badge';
+import { BsHeartFill } from 'react-icons/bs';
 
 const Right = () => {
 
 
 
-=======
-
-const Right = () => {
-
->>>>>>> de4cc00f3462f5e042bd3a1556cba3692eb502a0
     const [api, setApiData] = useState([]);
     const colRef = collection(db, 'users')
     const q = query(colRef, orderBy('bytime', 'desc'))
@@ -46,7 +37,6 @@ const Right = () => {
         return unsubscribe;
     }, []);
 
-<<<<<<< HEAD
     const [status, setStatus] = useState([]);
 
     useEffect(() => {
@@ -76,8 +66,6 @@ const Right = () => {
     }, []);
 
 
-=======
->>>>>>> de4cc00f3462f5e042bd3a1556cba3692eb502a0
     const handleToggleShowAll = () => {
         setShowAll((prevShowAll) => !prevShowAll);
     };
@@ -92,7 +80,6 @@ const Right = () => {
 
     const navigate = useNavigate();
 
-<<<<<<< HEAD
     const handleUserClick = (id) => {
         navigate(`/users/${id}`);
     };
@@ -136,12 +123,6 @@ const Right = () => {
     // Define the StyledBadge component with custom styling
 
 
-=======
-    const handleUserClick= (id) => {
-        navigate(`/users/${id}`);
-    };
-
->>>>>>> de4cc00f3462f5e042bd3a1556cba3692eb502a0
     const Data = UserDataApi.filter((item) => item.uid !== currentuser.uid) // exclude current user's profile
         .slice(0, showAll ? UserDataApi.length : 3)
         .map((item) => (
@@ -159,9 +140,10 @@ const Right = () => {
                         {addedUsers[item.id] ? "Remove" : "Add"}
                     </div>
                 </div>
-<<<<<<< HEAD
             </div>
         ));
+
+
 
     return (
         <>
@@ -181,36 +163,6 @@ const Right = () => {
                         <span>Online</span> <div><GoPrimitiveDot className='online-icon' /></div>
                     </div>
 
-                    {/* {status.map((item) => {
-                        if (item.uid !== currentuser.uid) {
-                            return (
-                                <div key={item.id} className="online-user-div">
-
-                                    <span>
-                                        {item.status === 'online' ? (
-                                            <StyledBadge
-                                                overlap="circular"
-                                                anchorOrigin={{ vertical: 'left', horizontal: 'right' }}
-                                                variant="dot"
-                                            >
-                                                <Avatar alt="Remy Sharp" src={item.photoUrl} />
-                                            </StyledBadge>
-                                        ) : (
-                                            <Avatar
-                                                alt="Remy Sharp"
-                                                src={item.photoUrl}
-                                                sx={{ width: 40, height: 40 }}
-                                            />
-                                        )}
-                                    </span>
-
-                                    <span className="online-user-name">{item.presenceName}</span>
-                                </div>
-                            )
-
-                        }
-                    })} */}
-
                     {onlineUsers.map((item) => {
                         if (item.uid !== currentuser.uid) {
                             return (
@@ -224,7 +176,7 @@ const Right = () => {
                                         >
                                             <Avatar alt="Remy Sharp" src={item.photoUrl} />
                                         </StyledBadge>
-                                        
+
                                     </span>
 
                                     <span className="online-user-name">{item.presenceName}</span>
@@ -240,17 +192,6 @@ const Right = () => {
 
 
         </>
-=======
-            </div>  
-        ));
-
-    return (
-        <div className='div-right'>
-            <div className='suggest-div'>Suggestions for you
-                <div className='see-all' onClick={handleToggleShowAll}>{showAll ? (<TiArrowSortedUp style={{ cursor: "pointer", fontSize: "25px" }} />) : (<TiArrowSortedDown style={{ cursor: "pointer", fontSize: "25px" }} />)}</div> </div>
-            {Data}
-        </div>
->>>>>>> de4cc00f3462f5e042bd3a1556cba3692eb502a0
     )
 }
 

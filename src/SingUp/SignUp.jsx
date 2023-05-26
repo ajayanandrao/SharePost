@@ -72,7 +72,6 @@ const SignUp = () => {
                             // bytime: serverTimestamp(),
                         });
 
-<<<<<<< HEAD
                         const PresenceRef = doc(db, "userPresece", res.user.uid);
 
                         await setDoc(PresenceRef, {
@@ -98,33 +97,14 @@ const SignUp = () => {
                         };
                         await setDoc(PresenceRefOnline, userData);
 
-=======
->>>>>>> de4cc00f3462f5e042bd3a1556cba3692eb502a0
                         setDoc(doc(db, "userPostsList", res.user.uid), { messages: [] });
+                        
+                        const UpdateProfile = doc(db, "UpdateProfile", res.user.uid);
 
-                        const profileDataRef = doc(db, "UpdateProfile", res.user.uid);
-
-                        await setDoc(profileDataRef, {
+                        await setDoc(UpdateProfile, {
                             name: name,
-                            CoverPhoto: "",
                             userPhoto: downloadURL,
-
-                            FirstName: "",
-                            LastName: "",
-<<<<<<< HEAD
-
-                            Address: "",
-                            // MobileNumber: "No Mobile Number to show",
-                            // UserName: 'no user name to show ',
-
-=======
-                            
-                            Address: "",
-                            // MobileNumber: "No Mobile Number to show",
-                            // UserName: 'no user name to show ',
-                            
->>>>>>> de4cc00f3462f5e042bd3a1556cba3692eb502a0
-                            uid: currentuser.uid,
+                            uid: res.user.uid,
                         });
 
                     });

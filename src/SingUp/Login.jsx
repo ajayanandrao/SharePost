@@ -5,15 +5,10 @@ import t from "./../Image/img/tt.png";
 import i from "./../Image/img/ic.png";
 import { Link, useNavigate } from 'react-router-dom';
 import { signInWithEmailAndPassword } from 'firebase/auth';
-<<<<<<< HEAD
 import { auth, db } from '../firebase';
-import NewNavbar from '../NewNavbar/NewNavbar';
 import { doc, setDoc, updateDoc } from 'firebase/firestore';
 import { AuthContext } from '../AuthContaxt';
-=======
-import { auth } from '../firebase';
 import NewNavbar from '../NewNavbar/NewNavbar';
->>>>>>> de4cc00f3462f5e042bd3a1556cba3692eb502a0
 
 const Login = () => {
 

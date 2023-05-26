@@ -3,10 +3,7 @@
 @import "./../../Styles/Insta.scss";
 
 .div-right {
-<<<<<<< HEAD
-=======
 
->>>>>>> de4cc00f3462f5e042bd3a1556cba3692eb502a0
     flex: 1;
     display: flex;
     flex-direction: column;
@@ -15,7 +12,6 @@
     position: sticky;
     top: 60px;
     height: calc(100vh - 60px);
-<<<<<<< HEAD
 
     .Data-div {
         // background: blue;
@@ -50,7 +46,7 @@
             cursor: pointer;
 
             .online-user-name {
-                margin-left:1rem ;
+                margin-left: 1rem;
                 text-transform: capitalize;
             }
         }
@@ -67,8 +63,7 @@
 .online-icon-red {
     font-size: 18px;
     color: #B40404;
-=======
->>>>>>> de4cc00f3462f5e042bd3a1556cba3692eb502a0
+
 }
 
 @include insta-1160 {
@@ -77,7 +72,6 @@
     }
 }
 
-<<<<<<< HEAD
 .scrollable-container {
     overflow-y: scroll;
     scrollbar-width: thin;
@@ -97,10 +91,6 @@
     background-color: transparent;
     /* Adjust as per your styling needs */
 }
-
-=======
->>>>>>> de4cc00f3462f5e042bd3a1556cba3692eb502a0
-//=================================================
 
 .overlay {
     position: fixed;
