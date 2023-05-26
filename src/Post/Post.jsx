@@ -1,7 +1,8 @@
 import { Box, LinearProgress } from '@mui/material';
-import React, { useContext, useEffect, useState } from 'react'
+import React, { useContext, useEffect, useRef, useState } from 'react'
 import { Link } from 'react-router-dom';
 import "./Post.scss";
+import "./../Practice.scss";
 
 import photo from "./../Image/img/photo.png";
 import video from "./../Image/img/v.png";
@@ -28,7 +29,7 @@ const Post = () => {
   const [img, setImg] = useState(null);
   const [showEmoji, setShowEmoji] = useState(false);
   const [showImg, setShowImg] = useState(false);
-
+  const [userPhoto, setUserPhoto] = useState(null);
 
   // const { uuid } = require('uuidv4');
 
@@ -39,84 +40,103 @@ const Post = () => {
     return unsub;
   }, []);
 
+  const dataRef = collection(db, "users");
 
-  const addPost = async (e) => {
-    if (postText && api) {
-      const colRef = collection(db, "AllPosts");
+  useEffect(() => {
+    const unsub = onSnapshot(dataRef, (snapshot) => {
+      setUserPhoto(snapshot.docs.map((doc) => ({ ...doc.data(), id: doc.id })));
+    });
+    return unsub;
+  }, []);
+
+
+  // ---------------------
+
+  const handleUpload = async () => {
+
+    setShowEmoji(false);
+    setPostText("");
+    setImg(null);
+
+    if (img || postText) {
+      let downloadURL = "";
 
       if (img) {
-        const storageRef = ref(storage, "Post/" + v4());
+
+        const storageRef = ref(storage, "PostVideo/" + v4());
         const uploadTask = uploadBytesResumable(storageRef, img);
 
         uploadTask.on(
           "state_changed",
           (snapshot) => {
-            const progress =
-              (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+            const progress = Math.round(
+              (snapshot.bytesTransferred / snapshot.totalBytes) * 100
+            );
             if (progress < 100) {
               document.getElementById("p1").style.display = "block";
             } else {
               document.getElementById("p1").style.display = "none";
             }
+            console.log("Loading:", progress);
           },
-          (error) => { },
-          () => {
-            getDownloadURL(uploadTask.snapshot.ref).then(async (downloadURL) => {
-              console.log("File available at", downloadURL);
-              await addDoc(colRef, {
-                uid: currentuser.uid,
-                photoURL: currentuser.photoURL,
-                displayName: currentuser.displayName,
-                name: postText,
-                img: downloadURL,
-                bytime: serverTimestamp(),
-              });
+          (error) => {
+            console.log("Error uploading img:", error);
+          },
+          async () => {
+            try {
+              await uploadTask;
+              downloadURL = await getDownloadURL(uploadTask.snapshot.ref);
+              saveData(downloadURL);
 
-              await updateDoc(doc(db, "userPostsList", currentuser.uid), {
-                messages: arrayUnion({
-                  id: v4(),
-                  uid: currentuser.uid,
-                  photoURL: currentuser.photoURL,
-                  displayName: currentuser.displayName,
-                  name: postText,
-                  img: downloadURL,
-                  bytime: Timestamp.now(),
-                }),
-              });
-            });
+              console.log('img uploaded successfully');
+            } catch (error) {
+              console.log('Error uploading img:', error);
+            }
           }
         );
       } else {
-        await addDoc(colRef, {
-          uid: currentuser.uid,
-          photoURL: currentuser.photoURL,
-          displayName: currentuser.displayName,
-          name: postText,
-          bytime: serverTimestamp(),
-        });
-
-        await updateDoc(doc(db, "userPostsList", currentuser.uid), {
-          messages: arrayUnion({
-            id: v4(),
-            uid: currentuser.uid,
-            photoURL: currentuser.photoURL,
-            displayName: currentuser.displayName,
-            name: postText,
-            bytime: Timestamp.now(),
-          }),
-        });
+        saveData(downloadURL); // Pass an empty string as the downloadURL
       }
-      setImg(null);
-      setPostText("");
-      setShowEmoji(false);
     } else {
-      // handle error case where postText or api is missing
+      console.log('No img or text entered');
     }
   };
 
+  const saveData = async (downloadURL) => {
+    const allPostsColRef = collection(db, 'AllPosts');
+    const userPostsListRef = doc(db, 'userPostsList', currentuser.uid);
+
+    await addDoc(allPostsColRef, {
+      name: img ? img.name : '',
+      img: img ? downloadURL : '', // Only use the downloadURL if a img was uploaded
+      uid: currentuser.uid,
+      photoURL: currentuser.photoURL,
+      displayName: currentuser.displayName,
+      postText: postText,
+      bytime: serverTimestamp(), // Use the server timestamp here
+    });
+
+    await updateDoc(userPostsListRef, {
+      messages: arrayUnion({
+        id: v4(),
+        uid: currentuser.uid,
+        photoURL: currentuser.photoURL,
+        displayName: currentuser.displayName,
+        postText: postText,
+        img: downloadURL,
+        bytime: Timestamp.now(),
+      }),
+    });
+
+    setImg(null);
+  };
+
+
+  // ===================================
+
   const handleKey = (e) => {
     if (e.key === "Enter") {
-      addPost();
+      handleUpload();
     }
   };
 
@@ -127,7 +147,7 @@ const Post = () => {
     let emoji = String.fromCodePoint(...codesArray);
     setPostText(postText + emoji);
   };
-  
+
   const handleInputClick = () => {
     // setShowEmoji(false);
     // setImg(!showImg);
@@ -136,7 +156,7 @@ const Post = () => {
   const Emoji = () => {
     setShowEmoji(!showEmoji);
     setShowImg(!showImg);
-    
+
   };
   const ShowImg = () => {
     setShowImg(true);
@@ -146,11 +166,25 @@ const Post = () => {
     ShowImg();
   };
 
-  
+  const [Photo, setPhoto] = useState(null);
 
+  const [isPlaying, setIsPlaying] = useState(false);
+  const videoRef = useRef(null);
+
+  const handleClick = () => {
+    const video = videoRef.current;
+    if (video.paused) {
+      video.play();
+      setIsPlaying(true);
+    } else {
+      video.pause();
+      setIsPlaying(false);
+    }
+  };
 
   return (
     <div className="div-center">
+
       <div className="post-container">
         <div className="post-inner" >
           <div className="user-post-container">
@@ -167,7 +201,7 @@ const Post = () => {
               onKeyDown={handleKey}
               value={postText}
             />
-            <span className="post-name" onClick={addPost} type="button">
+            <span className="post-name" onClick={handleUpload} type="button">
               Post
             </span>
           </div>
@@ -176,15 +210,22 @@ const Post = () => {
 
             <div className="post-category-contaner">
               <label htmlFor="p" onClick={Wrapp} style={{ cursor: "pointer" }}>
-                <input type="file" id="p" onChange={(e) => setImg(e.target.files[0])} style={{ display: "none" }} />
+
+                <input type="file" id="p" accept="image/*, video/*" onChange={(e) => setImg(e.target.files[0])} style={{ display: "none" }} />
+
                 <img src={photo} className="post-cat-img" />
                 <span className="post-cat-title">Photos</span>
               </label>
             </div>
 
-            <div  className="post-category-contaner">
-              <img src={video} className="post-cat-img" />
-              <span className="post-cat-title">Video</span>
+            <div className="post-category-contaner">
+              <label htmlFor="p" onClick={Wrapp} style={{ cursor: "pointer" }}>
+
+                <input type="file" id="p" accept="video/*" onChange={(e) => setImg(e.target.files[0])} style={{ display: "none" }} />
+
+                <img src={video} className="post-cat-img" />
+                <span className="post-cat-title">Video</span>
+              </label>
             </div>
 
             <div onClick={Emoji} className="post-category-contaner">
@@ -200,10 +241,25 @@ const Post = () => {
           {/* <EmojiPicker /> */}
 
           <div className="postImg-div">
-            {showImg && (<img className="postImg" src={img ? URL.createObjectURL(img) : ""} alt="" />)}
+
+            {img && img.type.startsWith('image/') && (
+              <img className="postImg" src={URL.createObjectURL(img)} alt="" />
+            )}
+
+            {img && img.type.startsWith('video/') && (
+              <div className="video-container mb-5">
+                <video ref={videoRef} onClick={handleClick} className="video ">
+                  <source src={URL.createObjectURL(img)} type={img.type} />
+                </video>
+                {!isPlaying && (
+                  <div className="play-button" onClick={handleClick}>
+                    <i className="fas fa-play"></i>
+                  </div>
+                )}
+              </div>
+            )}
 
           </div>
-
         </div>
 
         <Box sx={{ width: '100%' }}>

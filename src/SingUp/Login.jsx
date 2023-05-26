@@ -1,13 +1,18 @@
-import React, { useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import f from "./../Image/img/ff.png";
 import g from "./../Image/img/gg.png";
 import t from "./../Image/img/tt.png";
 import i from "./../Image/img/ic.png";
 import { Link, useNavigate } from 'react-router-dom';
 import { signInWithEmailAndPassword } from 'firebase/auth';
-import { auth } from '../firebase';
+import { auth, db } from '../firebase';
+import NewNavbar from '../NewNavbar/NewNavbar';
+import { doc, setDoc, updateDoc } from 'firebase/firestore';
+import { AuthContext } from '../AuthContaxt';
 
 const Login = () => {
+
+    const { currentuser } = useContext(AuthContext);
 
     const [email, setEmail] = useState("");
     const [password, setPass] = useState("");
@@ -17,6 +22,7 @@ const Login = () => {
     useEffect(() => {
         auth.onAuthStateChanged((user) => {
             if (user) {
+
                 nav("/home")
                 // return (<a href="https://google.com"></a>)
             } else {
@@ -29,9 +35,30 @@ const Login = () => {
         e.preventDefault();
 
         signInWithEmailAndPassword(auth, email, password)
-            .then((userCredential) => {
+            .then(async (userCredential) => {
                 // Signed in 
                 const user = userCredential.user;
+
+                const PresenceRef = doc(db, "userPresece", user.uid);
+
+                await updateDoc(PresenceRef, {
+                    status: "online",
+                });
+
+                const PresenceRefOnline = doc(db, "OnlyOnline", user.uid);
+
+                const userData = {
+                    status: 'Online',
+                    uid: user.uid || '',
+                    presenceName: user.displayName || '',
+                    presenceName: currentuser.displayName || '',
+                    email: email || '',
+                    photoUrl: user.photoURL || '',
+                    presenceTime: new Date()
+                    // presenceTime: new Date()
+                };
+                await setDoc(PresenceRefOnline, userData);
+
                 // console.log(user);
                 // ...
             })
@@ -62,10 +89,11 @@ const Login = () => {
     };
     return (
         <>
+            {/* <NewNavbar/> */}
             <div className="form-width">
-                <h2 className='text-center my-5'>Login Page</h2>
+                <h2 className='text-center login-text my-5'>Login Page</h2>
                 <form >
-        
+
                     <div id='error' className='error-div' style={{ display: "none" }}> </div>
 
                     <input type="email" id="form2Example1" value={email} className="form-control form-control-md mt-4" placeholder='Email' onChange={(e) => setEmail(e.target.value)} />

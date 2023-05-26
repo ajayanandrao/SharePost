@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import "./Feed.scss";
 import { BsFillHeartFill, BsHeart, BsHeartFill } from "react-icons/bs";
 import { RxDotsVertical } from "react-icons/rx";
@@ -6,20 +6,25 @@ import { VscChromeClose, VscHeart } from "react-icons/vsc";
 import { FaCommentDots } from "react-icons/fa";
 import { IoMdClose, IoMdShareAlt } from "react-icons/io";
 import { IoMdSend } from "react-icons/io";
-import { addDoc, collection, deleteDoc, doc, onSnapshot, serverTimestamp, setDoc, updateDoc } from 'firebase/firestore';
+import { addDoc, collection, deleteDoc, doc, onSnapshot, orderBy, query, serverTimestamp, setDoc, updateDoc } from 'firebase/firestore';
 import { db, storage } from '../firebase';
 import { getDownloadURL, ref, uploadBytes } from 'firebase/storage';
 
 import photo from "./../Image/img/photo.png";
 import FlipMove from 'react-flip-move';
 import { current } from '@reduxjs/toolkit';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 
 import { RiHeart2Fill } from 'react-icons/ri'
 import $ from 'jquery';
+// import moment from 'moment/moment';
+import ReactTimeago from 'react-timeago';
+import TimeAgo from 'react-timeago';
+import englishStrings from 'react-timeago/lib/language-strings/en';
+import buildFormatter from 'react-timeago/lib/formatters/buildFormatter';
 
 const Feed = ({ post, CurrentUser }) => {
-const [isClick, setClick] = useState(false);
+  const [isClick, setClick] = useState(false);
 
   const [editInput, setEditInput] = useState('');
   const [EditImg, setEditImg] = useState(null);
@@ -30,6 +35,9 @@ const [isClick, setClick] = useState(false);
 
   const [like, setLike] = useState([]);
   const [liked, setLiked] = useState(false);
+
+  const [online, setSetOnline] = useState([]);
+  const [onlined, setOnlined] = useState(false);
 
   useEffect(() => {
     const unsub = onSnapshot(collection(db, "AllPosts", post.id, "likes"),
@@ -44,6 +52,7 @@ const [isClick, setClick] = useState(false);
     setLiked(like.findIndex((like) => like.id === CurrentUser?.uid) !== -1);
   }, [like, CurrentUser.uid]);
 
+  //======================
 
   function OptionBtn(id) {
     const dropdownContent = document.getElementById(`myDropdown-${id}`)
@@ -70,12 +79,16 @@ const [isClick, setClick] = useState(false);
   }
 
   function off(id) {
-    document.getElementById(`overlay-${id}`).style.display = 'none'
+    document.getElementById(`overlay-${id}`).style.display = 'none';
+    setEditImg(null);
   }
 
   const done = async (id) => {
     setUpdating(true);
     const postRef = doc(db, 'AllPosts', id);
+    if (!editInput) {
+      return
+    }
     if (EditImg) {
       // If a new image is provided, upload it to storage and update the document
       const storageRef = ref(storage, `Post/${EditImg.name}`);
@@ -84,13 +97,13 @@ const [isClick, setClick] = useState(false);
       const imageUrl = await getDownloadURL(storageRef);
 
       await updateDoc(postRef, {
-        name: editInput,
+        postText: editInput,
         img: imageUrl
       });
     } else {
       // If no new image is provided, only update the name field
       await updateDoc(postRef, {
-        name: editInput
+        postText: editInput
       });
     }
     setEditInput("");
@@ -99,6 +112,8 @@ const [isClick, setClick] = useState(false);
   }
 
   // Comment Section ---------------------------------
+
+
 
   const Heart = async (id) => {
     handleClick();
@@ -110,6 +125,7 @@ const [isClick, setClick] = useState(false);
     } else {
       await setDoc(doc(db, "AllPosts", post.id, "likes", CurrentUser.uid), {
         userId: CurrentUser.uid,
+        name: CurrentUser.displayName
       });
       // element.style.color = '#FF0040';
     }
@@ -129,33 +145,40 @@ const [isClick, setClick] = useState(false);
 
 
   const HandleComment = async (e, id) => {
-    e.preventDefault()
+    e.preventDefault();
 
-    await addDoc(collection(db, "AllPosts", id, "comments"), {
+    await addDoc(collection(db, 'AllPosts', id, 'comments'), {
       comment: getComment,
       displayName: CurrentUser.displayName,
       photoURL: CurrentUser.photoURL,
-      timestamp: serverTimestamp(),
-      uid: CurrentUser.uid
-    })
+      uid: CurrentUser.uid,
+      commentTime: serverTimestamp(),
+    });
 
-    setComment("");
+    setComment('');
   };
+
+
   const [commentCount, setCommentCount] = useState(0);
 
   useEffect(() => {
-    const sub = onSnapshot(collection(db, "AllPosts", post.id, "comments"), (snap) => {
-      setNewComment(
-        snap.docs.map((snap) => ({
-          id: snap.id,
-          ...snap.data(),
-        }))
-      );
-      setCommentCount(snap.docs.length);
-    });
-    return () => {
-      sub();
-    };
+    const unsubscribe = onSnapshot(
+      query(
+        collection(db, 'AllPosts', post.id, 'comments'),
+        orderBy('commentTime', 'desc')
+      ),
+      (snap) => {
+        setNewComment(
+          snap.docs.map((snap) => ({
+            id: snap.id,
+            ...snap.data(),
+          }))
+        );
+        setCommentCount(snap.docs.length);
+      }
+    );
+
+    return unsubscribe;
   }, [post.id]);
 
 
@@ -164,7 +187,7 @@ const [isClick, setClick] = useState(false);
     deleteDoc(CommentRf);
   };
 
-
+  const formatter = buildFormatter(englishStrings);
   const userComment = newComment.map((item) => {
 
     return (
@@ -177,6 +200,14 @@ const [isClick, setClick] = useState(false);
           </div>
         </div>
         <div className="comments">{item.comment}</div>
+        {/* <TimeAgo date={item.commentTime.toDate()} /> */}
+        {item.commentTime && (
+          <TimeAgo className='timeago mt-3'
+            style={{
+              fontSize: '12px',
+              color: 'rgba(255, 255, 255, 0.5)'
+            }} date={item.commentTime.toDate()} formatter={formatter} />
+        )}
       </div>
     )
   });
@@ -201,16 +232,40 @@ const [isClick, setClick] = useState(false);
     setAnimate(!animate);
   };
 
+  const navigate = useNavigate()
+  const handleUserClick = (id) => {
+    navigate(`/users/${id}`);
+  };
+  const [isPlaying, setIsPlaying] = useState(false);
+  const videoRef = useRef(null);
+
+  const handleVideoBtnClick = () => {
+    const video = videoRef.current;
+    if (video.paused) {
+      video.play();
+      setIsPlaying(true);
+    } else {
+      video.pause();
+      setIsPlaying(false);
+    }
+  };
+
+  function TimeAgoComponent({ timestamp }) {
+    return <ReactTimeago date={timestamp} />;
+  }
+
   return (
     <>
       <div className='div-center'>
         <div className='Feed-Card-Container' id={post.id}>
           <div className='Feed-card-div' id='d'>
             <div className='Feed-Section-One'>
-              <Link style={{ display: "flex", alignItems: "center", color: "white" }} to="/profile">
+
+              <div onClick={(e) => handleUserClick(post.uid)} style={{ display: "flex", cursor: "pointer", alignItems: "center", color: "white" }} >
                 <img src={post.photoURL} className='Feed-Profile-img' alt='' />
                 <div className='Feed-Profile-name'>{post.displayName}</div>
-              </Link>
+              </div>
+
               <div
                 className='timeago ms-3'
                 style={{
@@ -218,7 +273,7 @@ const [isClick, setClick] = useState(false);
                   color: 'rgba(255, 255, 255, 0.5)'
                 }}
               >
-
+                <TimeAgoComponent timestamp={post.bytime && post.bytime.toDate()} />
               </div>
 
               <div className='Feed-Profile-Option-Container'>
@@ -279,7 +334,7 @@ const [isClick, setClick] = useState(false);
                         type='text'
                         className='edit-input'
                         placeholder='edit post'
-                        onChange={e => setEditInput(e.target.value)}
+                        onChange={(e) => setEditInput(e.target.value)}
                         value={editInput}
                         id={`editInput-${post.id}`}
                       />
@@ -289,6 +344,25 @@ const [isClick, setClick] = useState(false);
                     <div className='thurd-section-edit'>
                       <label htmlFor="EditImg">
                         <img className="postImg" src={EditImg ? URL.createObjectURL(EditImg) : "item.img"} alt="" />
+
+
+                        {EditImg && EditImg.type.startsWith('image/') && (
+                          <img className="postImg" src={URL.createObjectURL(EditImg)} alt="" />
+                        )}
+
+                        {EditImg && EditImg.type.startsWith('video/') && (
+                          <div className="video-container_">
+                            <video width={"300px"} height={"250px"} ref={videoRef} onClick={handleClick} className="video_ ">
+                              <source src={URL.createObjectURL(EditImg)} type={EditImg.type} />
+                            </video>
+                            {!isPlaying && (
+                              <div className="play-button_" onClick={handleClick}>
+                                {/* <i className="fas fa-play"></i> */}
+                              </div>
+                            )}
+                          </div>
+                        )}
+
 
                         <div className='overlay-set-photos'>
                           <img className='photo-img me-2' style={{ width: "25px" }} src={photo} alt="" /> Photos
@@ -300,7 +374,7 @@ const [isClick, setClick] = useState(false);
                     <div className='forth-section-edit'>
                       <button
                         className='btn btn-success btn-sm w-25'
-                        onClick={() => done(post.id)}
+                        onClick={(e) => done(post.id)}
                       >
                         Update
                       </button>
@@ -309,18 +383,44 @@ const [isClick, setClick] = useState(false);
 
                     <input type="file" id='EditImg'
                       onChange={(e) => setEditImg(e.target.files[0])}
-                      style={{ display: "none" }} />
+                      style={{ display: "none" }} accept="image/*, video/*" />
 
                   </div>
                 </div>
 
               </div>
 
-              <div className='Feed-Post-Text'>{post.name}</div>
+              <div className='Feed-Post-Text'>{post.postText}</div>
+
 
               <div className='Feed-Post-img-Container mt-3'>
-                <img className='Feed-Post-img' src={post.img} alt='' />
+                {/* <img className='Feed-Post-img' src={post.img} alt='' /> */}
+
+
+                {post.img && (post.name.includes('.jpg') || post.name.includes('.png')) ? (
+                  <img width={"300px"} src={post.img} alt="Uploaded" className="Feed-Post-img image" />
+                ) : post.img ? (
+
+                  <div className="video-container">
+                    <video ref={videoRef} className="video" onClick={handleVideoBtnClick}>
+                      <source src={post.img} type="video/mp4" />
+                    </video>
+                    {!isPlaying && (
+                      <a class="intro-banner-vdo-play-btn pinkBg" onClick={handleVideoBtnClick} target="_blank">
+                        <div className="play-button" >
+                          <i className="fas fa-play"></i>
+                        </div>
+                        <span class="ripple pinkBg"></span>
+                        <span class="ripple pinkBg"></span>
+                        <span class="ripple pinkBg"></span>
+                      </a>
+                    )}
+                  </div>
+
+
+                ) : null}
               </div>
+
             </div>
 
 
@@ -328,17 +428,36 @@ const [isClick, setClick] = useState(false);
 
 
               <div className='Feed-Comment-Section-div'>
-                <div  className='feed-comment-section-inner' onClick={() => Heart(post.id)} >
+                <div className='feed-comment-section-inner' onClick={() => Heart(post.id)} >
 
                   {liked ? (<div className={`HeartAnimation${' animate'}`} >
                   </div>) : (<div className={`HeartAnimation${animate ? '' : ''}`} >
                   </div>)}
 
-                  <div className='like-count ms-2' style={{fontSize:"14px"}}>{like.length > 0 && (<>{like.length}</>)}</div>
+                  <div className='like-count' style={{ fontSize: "14px" }}>
+                    {like.length > 0 && (<>{like.length}</>)}
+                  </div>
                 </div>
 
 
+
               </div>
+
+              {/* Online */}
+
+              {/* <div onClick={handleOnline}>logOut</div> */}
+
+              {/* <div className='Feed-Comment-Section-div'>
+                <div className='feed-comment-section-inner' onClick={() => handleOnline(post.id)} >
+
+                  login
+
+                  <br />
+                  {online.length > 0 && (<>{<>online</>}</>)}
+
+                </div>
+
+              </div> */}
 
               <div className='Feed-Comment-Section-div'>
                 <FaCommentDots
@@ -347,6 +466,8 @@ const [isClick, setClick] = useState(false);
                   className='react-icons'
                 />
                 <span className='ms-2'>{commentCount > 0 && commentCount}</span>
+
+
               </div>
 
 
@@ -363,7 +484,7 @@ const [isClick, setClick] = useState(false);
               id={`comment-${post.id}`}
               style={{ display: 'none' }}
             >
-              <hr />
+              <hr className='feed-hr' />
               <div className='feed-comment-div-one'>
                 <input
                   type='text'
@@ -388,6 +509,7 @@ const [isClick, setClick] = useState(false);
                 <div className='see-com' onClick={toggleVisibility}>see com..</div>
               </div>
               {isVisible && <div>{userComment}</div>}
+
             </div>
           </div>
         </div>

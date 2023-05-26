@@ -1,0 +1,114 @@
+.facebook-feed-container {
+    display: flex;
+    flex-direction: column;
+    background-color: #f0f2f5;
+    border-radius: 8px;
+    padding: 16px;
+}
+
+.facebook-feed-header {
+    display: flex;
+    align-items: center;
+    margin-bottom: 16px;
+}
+
+.facebook-feed-header-icon {
+    color: #1877f2;
+    font-size: 24px;
+    margin-right: 8px;
+}
+
+.facebook-feed-header-title {
+    font-size: 18px;
+    font-weight: 600;
+}
+
+// .facebook-feed-post {
+//     display: flex;
+//     flex-direction: column;
+//     background-color: #fff;
+//     border-radius: 8px;
+//     padding: 16px;
+//     margin-bottom: 16px;
+// }
+
+.facebook-feed-post-content {
+    background-color: #f2f2f2;
+    padding: 10px;
+    border-radius: 5px;
+
+    .facebook-feed-post-content-text {
+        font-size: 14px;
+        color: #333;
+        margin-bottom: 10px;
+
+        img {
+            max-width: 100%;
+            height: auto;
+            margin-top: 10px;
+        }
+    }
+}
+
+
+.facebook-feed-post-content-text {
+    font-size: 16px;
+    color: black;
+}
+
+.facebook-feed-post-icons {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.facebook-feed-post-icon {
+    color: #65676b;
+    font-size: 20px;
+    margin-right: 8px;
+}
+
+.facebook-feed-post-likes {
+    display: flex;
+    align-items: center;
+}
+
+.facebook-feed-post-likes-icon {
+    color: #f02849;
+    font-size: 16px;
+    margin-right: 4px;
+}
+
+.facebook-feed-post-likes-count {
+    font-size: 14px;
+}
+
+.facebook-feed-post-comments {
+    display: flex;
+    align-items: center;
+}
+
+.facebook-feed-post-comments-icon {
+    color: #3b5998;
+    font-size: 16px;
+    margin-right: 4px;
+}
+
+.facebook-feed-post-comments-count {
+    font-size: 14px;
+}
+
+.facebook-feed-post-share {
+    display: flex;
+    align-items: center;
+}
+
+.facebook-feed-post-share-icon {
+    color: #1a77f2;
+    font-size: 16px;
+    margin-right: 4px;
+}
+
+.facebook-feed-post-share-count {
+    font-size: 14px;
+}

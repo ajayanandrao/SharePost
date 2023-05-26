@@ -5,6 +5,8 @@ import { getAuth } from "firebase/auth"
 import { getFirestore} from "firebase/firestore"
 import { getStorage } from "firebase/storage";
 
+import { firebase } from "@firebase/app";
+import "@firebase/firestore";
 
 // const firebaseConfig = {
 //   apiKey: "AIzaSyBPNCxFTf6ew83aKV_PawA_1_7eIQ7VOpA",
@@ -16,12 +18,12 @@ import { getStorage } from "firebase/storage";
 // };
 
 const firebaseConfig = {
-  apiKey: "AIzaSyAUw30ECxgIim8bdKlwUqFf6nkSiiljT5M",
-  authDomain: "date2623.firebaseapp.com",
-  projectId: "date2623",
-  storageBucket: "date2623.appspot.com",
-  messagingSenderId: "309870280037",
-  appId: "1:309870280037:web:ddbf3a390b859c6d99b58c"
+  apiKey: "AIzaSyDShQgoPAaJAQRttQUhagA1UP1l5ImQImA",
+  authDomain: "projectone-fef60.firebaseapp.com",
+  projectId: "projectone-fef60",
+  storageBucket: "projectone-fef60.appspot.com",
+  messagingSenderId: "866657700029",
+  appId: "1:866657700029:web:bd88f68ecc370a70048fd4"
 };
 
 
@@ -29,11 +31,11 @@ const firebaseConfig = {
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
 
+
+
 const auth = getAuth(app);
-
-
 const storage = getStorage(app);
-
+const firestore = getFirestore(app);
 const db = getFirestore(app);
 
-export {auth, db, storage};
+export {auth, db, storage, firestore };

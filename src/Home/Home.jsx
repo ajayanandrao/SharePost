@@ -14,11 +14,12 @@ import { useCollectionData } from 'react-firebase-hooks/firestore';
 import { db } from '../firebase';
 import { AuthContext } from '../AuthContaxt';
 import NHome from './NHome';
+import Facebook from '../Facebook';
 
 const Home = () => {
 
   const [api, setApiData] = useState([]);
-    
+
   const { currentuser } = useContext(AuthContext);
 
   const currentUser = currentuser && currentuser;
@@ -27,20 +28,40 @@ const Home = () => {
   const q = query(colRef, orderBy('bytime', 'desc'))
   const [docs, loading, error] = useCollectionData(q, orderBy('bytime', 'desc'))
 
+  // useEffect(() => {
+  //   const unsub = onSnapshot(q, snapshot => {
+  //     setApiData(snapshot.docs.map(doc => ({ ...doc.data(), id: doc.id })))
+  //   })
+  //   return unsub;
+  // }, []);
+
+
   useEffect(() => {
-    const unsub = onSnapshot(q, snapshot => {
-        setApiData(snapshot.docs.map(doc => ({ ...doc.data(), id: doc.id })))
-    })
-    return unsub;
-}, []);
+    const colRef = collection(db, 'AllPosts');
+    const q = query(colRef, orderBy('bytime', 'desc'));
+
+    const unsubscribe = onSnapshot(q, (snapshot) => {
+      const fetchedPosts = snapshot.docs.map((doc) => {
+        const { name, img, postText, displayName, photoURL, bytime, uid } = doc.data();
+        return { id: doc.id, name, img, postText, displayName, photoURL, bytime, uid };
+      });
+
+      setApiData(fetchedPosts);
+    });
+
+    return () => {
+      unsubscribe();
+    };
+  }, []);
 
 
- const newData = api.map((item) => {
-      return (
-          <div key={item.id}>
-            <Feed CurrentUser={currentUser} post={item}/>
-          </div>
-      );
+  const newData = api.map((item) => {
+    return (
+      <div key={item.id}>
+        <Feed CurrentUser={currentUser} post={item} />
+        {/* <Facebook post={item}/> */}
+      </div>
+    );
   });
 
 
@@ -51,16 +72,16 @@ const Home = () => {
       behavior: "smooth"
     });
   };
-  
+
   return (
-    <div style={{flex:"1", paddingTop:"0.5rem"}}>
+    <div style={{ flex: "1", paddingTop: "0.5rem" }}>
 
       <div className="btn" onClick={handleScrollToTop} id="scrollTopBtn" >
         <AiOutlineArrowUp className="top-arrow" />
       </div>
       <Post />
       {/* <Feed /> */}
-      <FlipMove>{ newData }</FlipMove>
+      <FlipMove>{newData}</FlipMove>
     </div>
   )
 }

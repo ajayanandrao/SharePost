@@ -1,36 +1,48 @@
 @import "./../Styles/Mixin.scss";
 @import "./../Styles/Variable";
 
-.form-width{
+.form-width {
     width: 300px;
     margin: 0 auto;
-    .img-div{
+
+    .img-div {
         width: 100%;
         display: flex;
         justify-content: center;
         margin-top: 2rem;
     }
-    .img{
+
+    .img {
         width: 100px;
         height: 100px;
         object-fit: cover;
         border-radius: 50%;
         cursor: pointer;
     }
-    .photoinput{
+
+    .photoinput {
         display: none;
     }
-    .text-center{
+
+    .text-center {
         text-align: center;
+
     }
-    .btn{
+
+    .login-text {
+        color: #04B45F;
+    }
+
+    .btn {
         box-shadow: none !important;
         text-transform: capitalize !important;
     }
-    .form-control{
+
+    .form-control {
         // border: none !important;
     }
-    .btn-success{
+
+    .btn-success {
         font-size: 16px;
         height: 35px;
         display: flex;
@@ -38,4 +50,3 @@
         justify-content: center;
     }
 }
-

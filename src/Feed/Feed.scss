@@ -30,6 +30,10 @@
     animation: heart-burst .8s steps(28) forwards;
 }
 
+.wrapper {
+    // display: none;
+}
+
 @keyframes heart-burst {
     0% {
         background-position: left
@@ -46,8 +50,8 @@
     border-radius: 0.5rem;
     box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.1);
     margin: 0.5rem 0;
-    padding-bottom: 0.5rem;
-    border: 1px solid $link;
+    // padding-bottom: 0.5rem;
+    border: 1px solid $link; 
 
     .Feed-Section-One {
         display: flex;
@@ -65,7 +69,7 @@
 
         .Feed-Profile-name {
             margin-left: 1rem;
-            font-size: 16px;
+            font-size: 14px;
         }
 
         .Feed-Profile-Option-Container {
@@ -93,7 +97,7 @@
         width: 100%;
 
         .Feed-Post-Text {
-            font-size: 14px;
+            font-size: 16px;
             padding: 0 1rem;
             line-height: 18px;
         }
@@ -101,10 +105,12 @@
         .Feed-Post-img-Container {
             display: flex;
             justify-content: center;
+            background: rgb(0, 0, 0);
+            backdrop-filter: 10px;;
 
             .Feed-Post-img {
                 width: 100%;
-                max-height: 400px;
+                max-height: 450px;
                 object-fit: contain;
             }
         }
@@ -115,7 +121,6 @@
         display: flex;
         align-items: center;
         justify-content: space-between;
-        margin: 0.5rem 0;
         padding: 0 1rem;
 
         .Feed-Comment-Section-div {
@@ -126,9 +131,9 @@
                 align-items: center;
                 position: relative;
 
-                .like-count{
+                .like-count {
                     position: absolute;
-                    left: 35px;
+                    // left: 35px;
                 }
             }
 
@@ -144,6 +149,12 @@
         flex-direction: column;
         // align-items: center;
         padding: 0 1rem;
+
+        .feed-hr {
+            margin: 0;
+            margin-bottom: 0.5rem;
+
+        }
 
         .feed-comment-div-one {
             margin-bottom: 1rem;
