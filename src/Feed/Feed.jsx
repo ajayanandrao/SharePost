@@ -17,7 +17,11 @@ import { Link, useNavigate } from 'react-router-dom';
 
 import { RiHeart2Fill } from 'react-icons/ri'
 import $ from 'jquery';
+<<<<<<< HEAD
 // import moment from 'moment/moment';
+=======
+import moment from 'moment/moment';
+>>>>>>> de4cc00f3462f5e042bd3a1556cba3692eb502a0
 import ReactTimeago from 'react-timeago';
 import TimeAgo from 'react-timeago';
 import englishStrings from 'react-timeago/lib/language-strings/en';

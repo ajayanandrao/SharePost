@@ -9,7 +9,11 @@ import { RxHamburgerMenu } from "react-icons/rx";
 import { Link, useNavigate } from "react-router-dom";
 import { useContext, useEffect, useState } from "react";
 import { AuthContext } from "../AuthContaxt";
+<<<<<<< HEAD
 import { collection, deleteDoc, doc, getDoc, onSnapshot, updateDoc } from "firebase/firestore";
+=======
+import { collection, doc, getDoc, onSnapshot } from "firebase/firestore";
+>>>>>>> de4cc00f3462f5e042bd3a1556cba3692eb502a0
 import { Avatar } from "@mui/material";
 
 const openNav = () => {
@@ -27,7 +31,10 @@ const Navbar = () => {
 
   const dataRef = collection(db, "users");
   const [userPhoto, setUserPhoto] = useState(null);
+<<<<<<< HEAD
 
+=======
+>>>>>>> de4cc00f3462f5e042bd3a1556cba3692eb502a0
   useEffect(() => {
     const unsub = onSnapshot(dataRef, (snapshot) => {
       setUserPhoto(snapshot.docs.map((doc) => ({ ...doc.data(), id: doc.id })));

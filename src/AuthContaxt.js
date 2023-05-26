@@ -11,7 +11,11 @@ export const AuthContextProvider = ({ children }) => {
             if (user) {
                 setCurrentUser(user);
                 const uid = user.uid;
+<<<<<<< HEAD
 
+=======
+               
+>>>>>>> de4cc00f3462f5e042bd3a1556cba3692eb502a0
             } else {
 
             }
