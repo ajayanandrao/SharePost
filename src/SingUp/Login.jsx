@@ -45,15 +45,15 @@ const Login = () => {
                     status: "online",
                 });
 
+
                 const PresenceRefOnline = doc(db, "OnlyOnline", user.uid);
 
                 const userData = {
                     status: 'Online',
-                    uid: user.uid || '',
-                    presenceName: user.displayName || '',
-                    presenceName: currentuser.displayName || '',
-                    email: email || '',
-                    photoUrl: user.photoURL || '',
+                    uid: user.uid,
+                    presenceName: user.displayName,
+                    email: email,
+                    photoUrl: user.photoURL,
                     presenceTime: new Date()
                     // presenceTime: new Date()
                 };

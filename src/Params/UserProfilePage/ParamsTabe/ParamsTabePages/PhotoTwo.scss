@@ -1,0 +1,391 @@
+@import "./../../../../Styles/Mixin_New.scss";
+@import "./../../../../Styles/Variable";
+
+
+.grad-width {
+    display: flex;
+    justify-content: center;
+}
+
+.div {
+    margin: 0 auto;
+    max-width: 880px;
+    // background: red;
+    margin-bottom: 30px;
+
+    @include respond-to(md) {
+        max-width: 700px;
+    }
+
+    .Photo-video-container {
+        // max-width: 880px;
+        margin: 0 auto;
+        display: flex;
+        justify-content: start;
+        // background: red;
+
+        .Vdieo-text {
+            font-size: 24px;
+            font-weight: 600;
+        }
+    }
+}
+
+.grid-container {
+    flex-basis: 880px;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1.5rem;
+
+    @include respond-to(md) {
+        flex-basis: 700px;
+        // display: none;
+        grid-template-columns: repeat(3, 1fr);
+    }
+
+    @include respond-to(sm) {
+        flex-basis: 635px;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 1rem;
+        // display: none;
+    }
+
+    @include respond-to(xs) {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 0.3rem;
+    }
+
+    .Background-Photo-div {
+        width: 200px;
+        height: 220px;
+        background-position: center;
+        background-repeat: no-repeat;
+        background-size: cover;
+        border-radius: 0.5rem 1rem 0.5rem 0.5rem;
+        transition: 0.3s ease-in-out;
+        display: flex;
+        justify-content: end;
+        cursor: pointer;
+
+        @include respond-to(md) {
+            // height: 170px;
+        }
+
+        @include respond-to(sm) {
+            // height: 200px;
+            // display: none;
+        }
+
+        @include respond-to(xs) {
+            max-width: 170px;
+            // display: none;
+        }
+
+        // &:hover {
+        //     transform: scale(1.1);
+        //     box-shadow: 5px 5px 5px 5px rgba(0, 0, 0, 0);
+        // }
+
+        .photo-option-btn-div {
+            cursor: pointer;
+            width: 30px;
+            height: 30px;
+            border-radius: 100%;
+            background: #0a19294d;
+            backdrop-filter: blur(5px);
+            // border: 1px solid $link;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .option-mainu-container {
+            position: relative;
+
+            .option-mainu {
+                height: calc(100% - 50px);
+                background: #0b243b46;
+                backdrop-filter: blur(10px);
+                border-radius: 0.5rem;
+                padding: 0.5rem;
+                position: absolute;
+                top: 35px;
+                right: 0;
+                display: flex;
+                flex-direction: column;
+                display: flex;
+                justify-content: space-between;
+
+                .photo-option-item {
+                    font-size: 20px;
+                    color: rgba(255, 255, 255, 0.425);
+                    cursor: pointer;
+
+                    &:hover {
+                        color: white;
+                    }
+
+                    @include respond-to(xs) {
+                        color: white;
+                    }
+                }
+            }
+        }
+
+    }
+
+    .grid-photo-card {
+        max-width: 200px;
+        height: 220px;
+        cursor: pointer;
+        transition: 0.3s ease-in-out;
+
+        @include respond-to(md) {
+            height: 170px;
+        }
+
+        @include respond-to(sm) {
+            height: 200px;
+            // display: none;
+        }
+
+
+        &:hover {
+            transform: scale(1.1);
+            box-shadow: 5px 5px 5px 5px rgba(0, 0, 0, 0.2);
+        }
+
+        .grid-img {
+            width: 100%;
+            height: 100%;
+            border-radius: 5px;
+            object-fit: cover;
+        }
+
+    }
+}
+
+//  Show Photo =========
+
+
+#PhotOverlay {
+    position: fixed;
+    display: none;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 2;
+    cursor: pointer;
+
+}
+
+#Photo-text {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+    font-size: 14px;
+    color: white;
+
+    .photo-inner-div {
+        min-width: 700px;
+        // max-height: 900px;
+        // background: red;
+        display: flex;
+        flex-direction: column;
+        // align-items: center;
+        justify-content: end;
+        align-items: center;
+
+        @include respond-to(xs) {
+            min-width: 330px;
+            // height: 00px;
+        }
+    }
+
+    .photo-close {
+        width: 100%;
+        display: flex;
+        justify-content: end;
+
+        @include respond-to(xs) {
+            width: 100%;
+        }
+
+        .photo-close-btn {
+            font-size: 24px;
+            margin-bottom: 1rem;
+        }
+    }
+}
+
+.overlay-photo {
+    // width: 100%;
+    min-height: 300px;
+    border-radius: 0.5rem;
+    object-fit: contain;
+
+    @include respond-to(xs) {
+        width: 100%;
+    }
+}
+
+
+// Video ========================
+.video-hr {
+    max-basis: 660px;
+    margin: 0 auto;
+}
+
+//
+.grid-center {
+    @include respond-to(xs) {
+        display: flex;
+        justify-content: center;
+    }
+}
+
+.video-container-div {
+    // padding-top: 3rem;
+    flex-basis: 880px;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1.5rem;
+
+    @include respond-to(md) {
+        flex-basis: 700px;
+        // display: none;
+        grid-template-columns: repeat(3, 1fr);
+    }
+
+    @include respond-to(sm) {
+        flex-basis: 635px;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 1rem;
+        // display: none;
+    }
+
+    @include respond-to(xs) {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 0.3rem;
+    }
+
+}
+
+
+.video-background {
+    position: relative;
+    width: 200px;
+    height: 220px;
+    overflow: hidden;
+    cursor: pointer;
+    border-radius: 1rem;
+
+    @include respond-to(md) {
+        // height: 170px;
+    }
+
+    @include respond-to(sm) {
+        // height: 200px;
+    }
+
+    @include respond-to(xs) {
+        max-width: 170px;
+
+    }
+
+    .video-option {
+        position: relative;
+        width: 100%;
+        z-index: 1;
+        display: flex;
+        flex-direction: column;
+        justify-content: end;
+        align-items: end;
+
+        .option-mainu-container {
+            background: #0b243b46;
+            backdrop-filter: blur(10px);
+            margin-top: 0.5rem;
+            border-radius: 0.5rem;
+
+            .option-mainu {
+                display: flex;
+                justify-content: space-between;
+                flex-direction: column;
+                height: 150px;
+                padding: 0.5rem;
+
+                .photo-option-item {
+                    font-size: 20px;
+                }
+            }
+
+            // .option-mainu {
+            //     height: calc(100% - 50px);
+            //     background: #0b243b46;
+            //     backdrop-filter: blur(10px);
+            //     border-radius: 0.5rem;
+            //     padding: 0.5rem;
+            //     position: absolute;
+            //     top: 35px;
+            //     right: 0;
+            //     display: flex;
+            //     flex-direction: column;
+            //     display: flex;
+            //     justify-content: space-between;
+
+            //     .photo-option-item {
+            //         font-size: 20px;
+            //         color: rgba(255, 255, 255, 0.425);
+            //         cursor: pointer;
+
+            //         &:hover {
+            //             color: white;
+            //         }
+
+            //         @include respond-to(xs) {
+            //             color: white;
+            //         }
+            //     }
+            // }
+        }
+
+
+        .photo-option-btn-div {
+            cursor: pointer;
+            width: 30px;
+            height: 30px;
+            border-radius: 100%;
+            background: #0a19294d;
+            backdrop-filter: blur(5px);
+            // border: 1px solid $link;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+
+    }
+}
+
+.video-background video {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    z-index: 0;
+}
+
+.content {
+    position: relative;
+    z-index: 1;
+    /* Add any styling for your content here */
+}

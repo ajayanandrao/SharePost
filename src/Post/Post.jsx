@@ -13,7 +13,7 @@ import { db, storage } from '../firebase';
 import { AuthContext } from '../AuthContaxt';
 import { v4, uuidv4 } from "uuid";
 import { getDownloadURL, ref, uploadBytesResumable } from 'firebase/storage';
-import { addDoc, arrayUnion, collection, doc, onSnapshot, orderBy, query, serverTimestamp, Timestamp, updateDoc } from 'firebase/firestore';
+import { addDoc, arrayUnion, collection, doc, onSnapshot, orderBy, query, serverTimestamp, setDoc, Timestamp, updateDoc } from 'firebase/firestore';
 import Picker from '@emoji-mart/react';
 
 
@@ -27,6 +27,7 @@ const Post = () => {
   const [postText, setPostText] = useState("");
   const [api, setApiData] = useState([]);
   const [img, setImg] = useState(null);
+
   const [showEmoji, setShowEmoji] = useState(false);
   const [showImg, setShowImg] = useState(false);
   const [userPhoto, setUserPhoto] = useState(null);
@@ -105,8 +106,19 @@ const Post = () => {
   const saveData = async (downloadURL) => {
     const allPostsColRef = collection(db, 'AllPosts');
     const userPostsListRef = doc(db, 'userPostsList', currentuser.uid);
+    const userPostPhotoRef = collection(db, "UserPostPhoto");
 
     await addDoc(allPostsColRef, {
+      name: img ? img.name : '',
+      img: img ? downloadURL : '', // Only use the downloadURL if a img was uploaded
+      uid: currentuser.uid,
+      photoURL: currentuser.photoURL,
+      displayName: currentuser.displayName,
+      postText: postText,
+      bytime: serverTimestamp(), // Use the server timestamp here
+    });
+
+    await addDoc(userPostPhotoRef, {
       name: img ? img.name : '',
       img: img ? downloadURL : '', // Only use the downloadURL if a img was uploaded
       uid: currentuser.uid,

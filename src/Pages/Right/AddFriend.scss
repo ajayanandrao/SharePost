@@ -1,0 +1,44 @@
+.request-Container {
+    width: 300px;
+    height: auto;
+    // background: red;
+    margin: 0.5rem 0rem;
+
+    .request-profile-container {
+        display: flex;
+        flex-direction: column;
+
+        .request-profile-flex {
+            flex-basis: 200px;
+            display: flex;
+            align-items: center;
+            // background: gray;
+        }
+        .btn-div{
+            flex: 1;
+            display: flex;
+            justify-content:end;
+        }
+        .request-close-flex {
+            // width: 100%;
+            flex-basis: 50px;
+            display: flex;
+            justify-content: end;
+            font-size: 20px;
+        }
+
+        .request-profile-img {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            object-fit: cover;
+            cursor: pointer;
+        }
+        
+        .request-profile-name {
+            margin-left: 1rem;
+            cursor: pointer;
+            font-size: 14px;
+        }
+    }
+}

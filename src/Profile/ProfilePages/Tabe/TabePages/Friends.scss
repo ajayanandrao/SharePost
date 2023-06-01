@@ -1,5 +1,6 @@
 @import "./../../../../Styles/Variable";
 @import "./../../../../Styles/Mixin.scss";
+@import "./../../../../Styles/Mixin_New.scss";
 
 .friend-bg-div {
     width: 100%;
@@ -22,16 +23,18 @@
             height: 50px;
             display: flex;
             align-items: center;
+
             .friend-text {
                 // flex: 0.9;
                 // background:blue;
                 // margin-right: 1rem;
-                
+
             }
 
             .search-friend-div {
                 width: 100%;
                 display: flex;
+
                 // background: red;
                 // flex-basis: 500px;
                 .search {
@@ -61,51 +64,74 @@
 
 
         .friend-wrapper {
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: space-between;
-            margin-top: 1rem;
+            margin-top: 2rem;
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 5px;
+
+            @include respond-to(sm) {
+                grid-template-columns: repeat(3, 1fr);
+                // gap: 15px;
+            }
+
+            @include respond-to(xs) {
+                grid-template-columns: repeat(2, 1fr);
+                // gap: 15px;
+            }
 
             .friend-list-div {
-               
-                width: 240px;
-                height: 100px;
-                display: flex;
-                align-items: center;
-                margin: 1rem 0;
 
-                // background: blueviolet;
                 .friend-img {
                     width: 80px;
                     height: 80px;
                     object-fit: cover;
-                    border-radius: 0.5rem;
+                    border-radius: 0.3rem;
+                    cursor: pointer;
                 }
 
                 .friend-name {
-                    margin: 0 0.5rem;
+                    cursor: pointer;
+
+                    h6 {
+                        text-transform: capitalize;
+                        @include respond-to(xs) {
+                            font-size: 14px;
+                        }
+                    }
                 }
             }
         }
+
+        // .friend-wrapper {
+        //     display: flex;
+        //     flex-wrap: wrap;
+        //     justify-content: space-between;
+        //     margin-top: 1rem;
+
+        //     .friend-list-div {
+
+        //         width: 240px;
+        //         height: 100px;
+        //         display: flex;
+        //         align-items: center;
+        //         margin: 1rem 0;
+
+        //         // background: blueviolet;
+        //         .friend-img {
+        //             width: 80px;
+        //             height: 80px;
+        //             object-fit: cover;
+        //             border-radius: 0.5rem;
+        //         }
+
+        //         .friend-name {
+        //             margin: 0 0.5rem;
+        //         }
+        //     }
+        // }
     }
 }
 
-@include tab{
-    .friend-container {
-        width: 100% !important;
-        height: auto !important;
-    }
-    .friend-list-div {
-        height: auto !important;
-        width: 150px !important;
-        flex-direction: column;
-    }
-    .friend-wrapper{
-        .friend-name, h6 {
-            margin-top: 0.3rem;
-        }
-    }
-}
 
 @include mobile {
     .friend-text {
@@ -118,24 +144,6 @@
 
         .s-f-input {
             width: 80% !important;
-        }
-    }
-
-    .friend-container {
-        width: 100% !important;
-        height: auto !important;
-    }
-
-    .friend-list-div {
-        flex-direction: row !important;
-        height: auto !important;
-        width: 200px !important;
-        flex-direction: column;
-    }
-    .friend-wrapper{
-        .friend-name, h6 {
-            font-size: 16px;
-            margin-top: 0.3rem;
         }
     }
 

@@ -1,6 +1,6 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { RxDotsVertical } from 'react-icons/rx';
-import { collection, doc, onSnapshot, orderBy, query, setDoc } from 'firebase/firestore';
+import { addDoc, collection, deleteDoc, doc, getDocs, onSnapshot, orderBy, query, serverTimestamp, setDoc, updateDoc, where } from 'firebase/firestore';
 import { db } from '../../firebase';
 import { useCollectionData } from 'react-firebase-hooks/firestore';
 import { TiArrowSortedDown, TiArrowSortedUp } from "react-icons/ti";
@@ -9,15 +9,14 @@ import { useNavigate } from 'react-router-dom/dist';
 import "./Right.scss";
 import "./RightTwo.scss";
 import { GoPrimitiveDot } from 'react-icons/go'
-import { Avatar } from '@mui/material';
-
+import { Avatar, nativeSelectClasses } from '@mui/material';
+import "./AddFriend.scss";
 import { styled, keyframes } from '@mui/system';
 import Badge from '@mui/material/Badge';
-import { BsHeartFill } from 'react-icons/bs';
+import { MdOutlineClose } from 'react-icons/md';
+import FlipMove from 'react-flip-move';
 
 const Right = () => {
-
-
 
     const [api, setApiData] = useState([]);
     const colRef = collection(db, 'users')
@@ -28,6 +27,8 @@ const Right = () => {
     const [showAll, setShowAll] = useState(false);
     const [addedUsers, setAddedUsers] = useState(false);
 
+
+
     useEffect(() => {
         const unsubscribe = onSnapshot(colRef, (snapshot) => {
             const newApi = snapshot.docs.map((doc) => ({ ...doc.data(), id: doc.id }));
@@ -37,34 +38,9 @@ const Right = () => {
         return unsubscribe;
     }, []);
 
-    const [status, setStatus] = useState([]);
+    // Own Friends Online
 
-    useEffect(() => {
-        const userRef = collection(db, 'userPresece');
-        const unsubscribe = onSnapshot(userRef, (snapshot) => {
-            const userList = snapshot.docs.map((doc) => ({
-                id: doc.id,
-                ...doc.data(),
-            }));
-            setStatus(userList);
-        });
-        return unsubscribe;
-    }, []);
-
-    const [onlineUsers, setOnlineUsers] = useState([]);
-
-    useEffect(() => {
-        const userRef = collection(db, 'OnlyOnline');
-        const unsubscribe = onSnapshot(userRef, (snapshot) => {
-            const userList = snapshot.docs.map((doc) => ({
-                id: doc.id,
-                ...doc.data(),
-            }));
-            setOnlineUsers(userList);
-        });
-        return unsubscribe;
-    }, []);
-
+    // 
 
     const handleToggleShowAll = () => {
         setShowAll((prevShowAll) => !prevShowAll);
@@ -84,6 +60,10 @@ const Right = () => {
         navigate(`/users/${id}`);
     };
 
+    const DeleteRequest = async (id) => {
+        const RequestRef = doc(db, 'friendRequests', id);
+        await deleteDoc(RequestRef);
+    };
 
 
     const rippleAnimation = keyframes`
@@ -120,7 +100,6 @@ const Right = () => {
             },
         },
     }));
-    // Define the StyledBadge component with custom styling
 
 
     const Data = UserDataApi.filter((item) => item.uid !== currentuser.uid) // exclude current user's profile
@@ -137,16 +116,125 @@ const Right = () => {
                 </span>
                 <div className="userAdd">
                     <div style={{ cursor: "pointer" }} onClick={() => handleAddFriend(item.id)}>
-                        {addedUsers[item.id] ? "Remove" : "Add"}
+                        {addedUsers[item.id] ? "Remove" :
+                            (<><div onClick={() => sendFriendRequest(item.uid, item.name, item.PhotoUrl)}>Add</div></>)}
                     </div>
                 </div>
             </div>
         ));
 
 
+    // Send Friend Request 
+
+    function sendFriendRequest(otherUserId, otherUserName, otherUserPhotoUrl) {
+        // Check if friend request already exists
+        const requestExists = friendRequests.some(
+            (request) =>
+                (request.senderId === currentuser.uid && request.receiverId === otherUserId) ||
+                (request.senderId === otherUserId && request.receiverId === currentuser.uid)
+        );
+
+        if (requestExists) {
+            alert('Friend request already exists');
+            return;
+        }
+
+        // Create a new friend request document in the "friendRequests" collection
+        const friendRef = collection(db, 'friendRequests');
+        addDoc(friendRef, {
+            senderId: currentuser.uid,
+            senderName: currentuser.displayName,
+            senderPhotoUrl: currentuser.photoURL,
+
+            receiverPhotoUrl: otherUserPhotoUrl,
+            receiverId: otherUserId,
+            receiverName: otherUserName,
+            status: 'pending',
+            timestamp: serverTimestamp(),
+        })
+
+            .then((docRef) => {
+                console.log('Friend request sent to:', docRef.id);
+                // Handle success
+            })
+            .catch((error) => {
+                console.error('Error sending friend request:', error);
+                // Handle error
+            });
+    }
+
+    const [friendRequests, setFriendRequests] = useState([]);
+
+    useEffect(() => {
+
+        const colRef = collection(db, 'friendRequests')
+        const userlist = () => {
+            onSnapshot(colRef, (snapshot) => {
+                let newbooks = []
+                snapshot.docs.forEach((doc) => {
+                    newbooks.push({ ...doc.data(), id: doc.id })
+                });
+                setFriendRequests(newbooks);
+            })
+        };
+        return userlist();
+    }, []);
+
+    const [onlineUsers, setOnlineUsers] = useState([]);
+
+    useEffect(() => {
+        const userRef = collection(db, 'OnlyOnline');
+        const unsubscribe = onSnapshot(userRef, (snapshot) => {
+            const userList = snapshot.docs.map((doc) => ({
+                id: doc.id,
+                ...doc.data(),
+            }
+            ));
+            setOnlineUsers(userList);
+        });
+        return unsubscribe;
+    }, []);
+
+    // Accept Friend Request
+
+    const acceptFriendRequest = async (requestId) => {
+        try {
+            const requestRef = doc(collection(db, 'friendRequests'), requestId);
+
+            await updateDoc(requestRef, { status: 'accepted' });
+            console.log('Friend request accepted successfully!');
+        } catch (error) {
+            console.error('Error accepting friend request:', error);
+        }
+    };
+    // =====================
+
+    const [friends, setFriends] = useState([]);
+
+    useEffect(() => {
+        if (currentuser) {
+
+            const friendsQuery = query(collection(db, 'friendRequests'), where('status', '==', 'accepted'));
+            const unsubscribeFriends = onSnapshot(friendsQuery, (snapshot) => {
+                const newFriends = snapshot.docs
+                    .filter(
+                        (doc) =>
+                            (doc.data().senderId === currentuser.uid || doc.data().receiverId === currentuser.uid) &&
+                            doc.data().status === 'accepted'
+                    )
+                    .map((doc) => ({ id: doc.id, ...doc.data() }));
+                setFriends(newFriends);
+            });
+
+            return () => {
+                unsubscribeFriends();
+            };
+        }
+    }, [currentuser, db]);
 
     return (
         <>
+
             <div className='div-right '>
                 <div className='suggest-div'>
                     Suggestions for you
@@ -187,6 +275,44 @@ const Right = () => {
                     })}
 
                 </div>
+
+
+                {friendRequests.map((item) => {
+                    if (item.receiverId === currentuser.uid && item.status !== 'accepted') {
+                        return (
+                            <div key={item.id} className='request-Container'>
+                                <div className='request-profile-container'>
+                                    <div>
+                                        <div className='request-profile-flex'>
+
+                                            <img src={item.senderPhotoUrl} className='request-profile-img' alt="" />
+
+                                            <div className='request-profile-name'>
+                                                {item.senderName}
+                                            </div>
+
+                                            <div className="btn-div">
+                                                <div className="btn glass-success btn-sm" onClick={() =>
+                                                    acceptFriendRequest(
+                                                        item.id, item.senderId, item.senderName
+                                                    )}> Accept </div>
+                                            </div>
+
+                                            <div className='request-close-flex'>
+                                                <i style={{ cursor: "pointer" }} class="bi bi-x"
+                                                    onClick={() => DeleteRequest(item.id)}
+                                                ></i>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        );
+                    } else {
+                        return null;
+                    }
+                })
+                }
 
             </div >
 

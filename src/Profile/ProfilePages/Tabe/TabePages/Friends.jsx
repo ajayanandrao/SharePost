@@ -1,11 +1,43 @@
-import React, { useState } from "react";
+import React, { useContext, useRef, useState } from "react";
 import "./Friends.scss";
 import { CgSearch } from "react-icons/cg";
-import json from "./user.json";
 import { useEffect } from "react";
+import { addDoc, collection, doc, onSnapshot, query, setDoc, updateDoc, where } from "firebase/firestore";
+import { db } from "../../../../firebase";
+import { AuthContext } from "../../../../AuthContaxt";
 
 const Friends = () => {
   const [search, setSearch] = useState("");
+  const { currentuser } = useContext(AuthContext);
+
+  const [friends, setFriends] = useState([]);
+
+  useEffect(() => {
+    if (currentuser) {
+
+      const friendsQuery = query(collection(db, 'friendRequests'), where('status', '==', 'accepted'));
+      const unsubscribeFriends = onSnapshot(friendsQuery, (snapshot) => {
+        const newFriends = snapshot.docs
+          .filter(
+            (doc) =>
+              (doc.data().senderId === currentuser.uid || doc.data().receiverId === currentuser.uid) &&
+              doc.data().status === 'accepted'
+          )
+          .map((doc) => ({ id: doc.id, ...doc.data() }));
+        setFriends(newFriends);
+      });
+
+      return () => {
+        unsubscribeFriends();
+      };
+    }
+  }, [currentuser, db]);
+
+
+  const filteredFriends = friends.filter((friend) =>
+    friend.senderName.toLowerCase().includes(search.toLowerCase()) ||
+    friend.receiverName.toLowerCase().includes(search.toLowerCase())
+  );
 
   return (
     <>
@@ -32,27 +64,31 @@ const Friends = () => {
               </div>
             </div>
 
-            <div className="friend-wrapper">
+            <div className="friend-wrapper ">
 
-
-
-              {json.filter((value) => {
-                if (search === "") {
-                  return value
-                } else if (value.name.toLowerCase().includes(search.toLowerCase())) {
-                  return value
-                }
-              })
-                .map((userlist) => {
-                  return (
-                    <div key={userlist.id} className="friend-list-div">
-                      <img src={userlist.img} className="friend-img" alt="" />
-                      <div className="friend-name">
-                        <h6>{userlist.name}</h6>
-                      </div>
+              {filteredFriends.length > 0 ? (
+                filteredFriends.map((friend) => (
+                  <div key={friend.id}>
+                    <div className="friend-list-div">
+                      {friend.senderId === currentuser.uid ? (
+                        <>
+                          <img className="friend-img" src={friend.receiverPhotoUrl} alt="" />
+                          <div className="friend-name">{friend.receiverName}</div>
+                        </>
+                      ) : (
+                        <>
+                          <img className="friend-img" src={friend.senderPhotoUrl} alt="" />
+                          <div className="friend-name">
+                            <h6>{friend.senderName}</h6>
+                          </div>
+                        </>
+                      )}
                     </div>
-                  );
-                })}
+                  </div>
+                ))
+              ) : (
+                <div className="no-friends-text">You have no friends.</div>
+              )}
 
             </div>
           </div>

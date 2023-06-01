@@ -9,6 +9,7 @@ import ProfileMainPage from './Profile/ProfileMainPage';
 import Users from './Params/Users';
 import UsersDetails from './Params/UsersDetails';
 import Practice from './Practice';
+import Work from './Work';
 
 
 function App() {
@@ -29,6 +30,7 @@ function App() {
           <Route path='users/:id' element={<UsersDetails />} />
 
           <Route path='p' element={<Practice />} />
+          <Route path='work' element={<Work />} />
 
         </Routes>
       </Router>

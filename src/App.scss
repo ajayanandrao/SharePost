@@ -1,7 +1,65 @@
 @import "./Styles/Variable";
 
-.btn{
+.btn {
+    font-size: 12px;
+    // padding: 0.3rem 0.5rem;
+    text-transform: capitalize;
     /* padding: 0; */
     color: white;
     box-shadow: none !important;
+}
+
+.btn-glass {
+    background-color: #0b243b0a;
+    backdrop-filter: blur(15px);
+    border: 1px solid $link;
+
+    &:hover {
+        background-color: #0b243bf8;
+        border: 1px solid $link;
+        border: 1px solid rgb(12, 240, 12);
+    }
+}
+
+.glass-success {
+    background-color: #0b243b0a;
+    backdrop-filter: blur(15px);
+    border: 1px solid $link;
+    padding: 0.3rem 0.5rem;
+    &:hover {
+        background-color: #0b243bf8;
+        border: 1px solid $link;
+        border: 1px solid rgb(30, 255, 0);
+    }
+}
+
+
+.glass-primary {
+    background-color: #0b243b0a;
+    backdrop-filter: blur(15px);
+    border: 1px solid $link;
+
+    &:hover {
+        background-color: #0b243bf8;
+        border: 1px solid $link;
+        border: 1px solid rgb(0, 0, 255);
+    }
+}
+
+.close-btn-one {
+    width: 28px;
+    height: 28px;
+    // background-color: #0b243b86;
+    // backdrop-filter: blur(10px);
+    border-radius: 50%;
+    border: 1px solid $link;
+    padding: 0px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    &:hover {
+        border: 1px solid $link;
+        background-color: $bg-div;
+    }
 }

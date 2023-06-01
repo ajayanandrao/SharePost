@@ -45,7 +45,7 @@ const ProfileTabes = ({Param}) => {
       </div>
 
       <div id="Photo" style={{ display: "none" }} className="tabcontent">
-        <ParamPhotos />
+        <ParamPhotos Param={Param} />
       </div>
     </>
   )
