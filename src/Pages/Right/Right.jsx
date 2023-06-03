@@ -130,8 +130,8 @@ const Right = () => {
         // Check if friend request already exists
         const requestExists = friendRequests.some(
             (request) =>
-                (request.senderId === currentuser.uid && request.receiverId === otherUserId) ||
-                (request.senderId === otherUserId && request.receiverId === currentuser.uid)
+                (request.senderUid === currentuser.uid && request.receiverUid === otherUserId) ||
+                (request.senderUid === otherUserId && request.receiverUid === currentuser.uid)
         );
 
         if (requestExists) {
@@ -140,14 +140,15 @@ const Right = () => {
         }
 
         // Create a new friend request document in the "friendRequests" collection
-        const friendRef = collection(db, 'friendRequests');
-        addDoc(friendRef, {
-            senderId: currentuser.uid,
+        const friendRef = doc(db, 'friendRequests', currentuser.uid);
+        setDoc(friendRef, {
+            senderUid: currentuser.uid,
             senderName: currentuser.displayName,
             senderPhotoUrl: currentuser.photoURL,
+            sender: "sender",
 
             receiverPhotoUrl: otherUserPhotoUrl,
-            receiverId: otherUserId,
+            receiverUid: otherUserId,
             receiverName: otherUserName,
             status: 'pending',
             timestamp: serverTimestamp(),
@@ -197,11 +198,32 @@ const Right = () => {
 
     // Accept Friend Request
 
-    const acceptFriendRequest = async (requestId) => {
+    const acceptFriendRequest = async (requestId, senderUid, senderName, senderPhotoUrl, sender) => {
         try {
             const requestRef = doc(collection(db, 'friendRequests'), requestId);
 
             await updateDoc(requestRef, { status: 'accepted' });
+
+            await deleteDoc(requestRef);
+
+            const AListRef = doc(db, 'A', currentuser.uid);
+            await setDoc(AListRef, {
+                name: currentuser.displayName,
+                uid: currentuser.uid,
+                photoUrl: currentuser.photoURL,
+                currentUid: senderUid,
+                sender: sender
+            });
+
+            const BListRef = doc(db, 'B', senderUid);
+            await setDoc(BListRef, {
+                uid: currentuser.uid,
+                currentUid: senderUid,
+                currentName: senderName,
+                currentPhoto: senderPhotoUrl,
+                accepter: "accepter"
+            });
+
             console.log('Friend request accepted successfully!');
         } catch (error) {
             console.error('Error accepting friend request:', error);
@@ -232,6 +254,46 @@ const Right = () => {
         }
     }, [currentuser, db]);
 
+
+    // const onlineFriends = list.filter((friend) => {
+    //     return onlineUsers.some((onlineUser) => onlineUser.uid === friend.currentUid);
+    // });
+
+    const [list, setList] = useState([]);
+    const [listTwo, setListTwo] = useState([]);
+
+    const AcceptedListRef = collection(db, 'A');
+    const BRef = collection(db, 'B');
+    useEffect(() => {
+        const unsub = () => {
+            onSnapshot(AcceptedListRef, (snapshot) => {
+                let newbooks = []
+                snapshot.docs.forEach((doc) => {
+                    newbooks.push({ ...doc.data(), id: doc.id })
+                });
+                setList(newbooks);
+            })
+        };
+
+        const sub = () => {
+            onSnapshot(BRef, (snapshot) => {
+                let newbooks = []
+                snapshot.docs.forEach((doc) => {
+                    newbooks.push({ ...doc.data(), id: doc.id })
+                });
+                setListTwo(newbooks);
+            })
+        };
+        return unsub(), sub();
+    }, []);
+
+    const [activeCity, setActiveCity] = useState('Online');
+
+    const openCity = (cityName) => {
+        setActiveCity(cityName);
+    };
+
+
     return (
         <>
 
@@ -246,7 +308,128 @@ const Right = () => {
                     {Data}
                 </div>
 
-                <div className="right-bottom-div">
+
+                <div className='tab-black-container'>
+                    <div className=" tab-black">
+                        <div className={`  tab-btn  ${activeCity === 'Online' ? 'active' : ''}`} onClick={() => openCity('Online')}>Online <GoPrimitiveDot className='online-icon' /></div>
+                        <div className={`  tab-btn ${activeCity === 'Request' ? 'active' : ''}`} onClick={() => openCity('Request')}>
+
+                            {friendRequests.some(item => item.receiverUid === currentuser.uid && item.status !== 'accepted') ? (
+                                <>
+                                    <div class="notification-icon">
+                                        <span class="notification-icon-inner"></span>
+                                        <span class="notification-text">🔔</span>
+                                        <span class="notification-dot"></span>
+                                    </div>
+                                </>
+                            ) : <>🔔</>}
+
+                        </div>
+                    </div>
+
+                    <div id="Online" className="w3-container city" style={{ display: activeCity === 'Online' ? 'block' : 'none' }}>
+                        <div className="right-bottom-div">
+
+                            {onlineUsers.map((item) => {
+                                if (item.uid !== currentuser.uid) {
+                                    return (
+                                        <div key={item.id} className="online-user-div">
+
+                                            <span>
+                                                <StyledBadge
+                                                    overlap="circular"
+                                                    anchorOrigin={{ vertical: 'left', horizontal: 'right' }}
+                                                    variant="dot"
+                                                >
+                                                    <Avatar alt="Remy Sharp" src={item.photoUrl} />
+                                                </StyledBadge>
+
+                                            </span>
+
+                                            <span className="online-user-name">{item.presenceName}</span>
+                                        </div>
+                                    )
+
+                                }
+                            })}
+
+
+                            {/* {onlineUsers.map((item) => {
+                                if (item.uid !== currentuser.uid) {
+                                    return (
+                                        <div key={item.id} className="online-user-div">
+
+                                            <span>
+                                                <StyledBadge
+                                                    overlap="circular"
+                                                    anchorOrigin={{ vertical: 'left', horizontal: 'right' }}
+                                                    variant="dot"
+                                                >
+                                                    <Avatar alt="Remy Sharp" src={item.photoUrl} />
+                                                </StyledBadge>
+
+                                            </span>
+
+                                            <span className="online-user-name">{item.presenceName}</span>
+                                        </div>
+                                    )
+
+                                }
+                            })} */}
+                        </div>
+                    </div>
+
+                    <div id="Request" className="w3-container city" style={{ display: activeCity === 'Request' ? 'block' : 'none' }}>
+
+
+                        {friendRequests.length === 0 ? (
+                            <div style={{ textAlign: "center" }}>You have no request</div>
+                        ) : (
+                            friendRequests.map((item) => {
+                                if (item.receiverUid === currentuser.uid && item.status !== 'accepted') {
+                                    return (
+                                        <div key={item.id} className='request-Container'>
+                                            <div className='request-profile-container'>
+                                                <div>
+                                                    <div className='request-profile-flex'>
+
+                                                        <img src={item.senderPhotoUrl} className='request-profile-img' alt="" />
+
+                                                        <div className='request-profile-name'>
+                                                            {item.senderName}
+                                                        </div>
+
+                                                        <div className="btn-div">
+                                                            <div className="btn glass-success btn-sm" onClick={() =>
+                                                                acceptFriendRequest(
+                                                                    item.id, item.senderUid, item.senderName,
+                                                                    item.senderPhotoUrl,
+                                                                    item.sender
+                                                                )}> Accept </div>
+                                                        </div>
+
+                                                        <div className='request-close-flex'>
+                                                            <i style={{ cursor: "pointer" }} class="bi bi-x"
+                                                                onClick={() => DeleteRequest(item.id)}
+                                                            ></i>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    );
+                                } else {
+                                    return null;
+                                }
+                            })
+                        )}
+
+                    </div>
+                </div>
+
+
+
+                {/* <div className="right-bottom-div">
                     <div className="online-titl-div">
                         <span>Online</span> <div><GoPrimitiveDot className='online-icon' /></div>
                     </div>
@@ -273,12 +456,13 @@ const Right = () => {
 
                         }
                     })}
+                </div> */}
 
-                </div>
 
 
-                {friendRequests.map((item) => {
-                    if (item.receiverId === currentuser.uid && item.status !== 'accepted') {
+
+                {/* {friendRequests.map((item) => {
+                    if (item.receiverUid === currentuser.uid && item.status !== 'accepted') {
                         return (
                             <div key={item.id} className='request-Container'>
                                 <div className='request-profile-container'>
@@ -294,7 +478,9 @@ const Right = () => {
                                             <div className="btn-div">
                                                 <div className="btn glass-success btn-sm" onClick={() =>
                                                     acceptFriendRequest(
-                                                        item.id, item.senderId, item.senderName
+                                                        item.id, item.senderUid, item.senderName,
+                                                        item.senderPhotoUrl,
+                                                        item.sender
                                                     )}> Accept </div>
                                             </div>
 
@@ -312,7 +498,7 @@ const Right = () => {
                         return null;
                     }
                 })
-                }
+                } */}
 
             </div >
 

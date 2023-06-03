@@ -10,34 +10,64 @@ const Friends = () => {
   const [search, setSearch] = useState("");
   const { currentuser } = useContext(AuthContext);
 
-  const [friends, setFriends] = useState([]);
+  // const [friends, setFriends] = useState([]);
+
+  // useEffect(() => {
+  //   if (currentuser) {
+
+  //     const friendsQuery = query(collection(db, 'friendRequests'), where('status', '==', 'accepted'));
+  //     const unsubscribeFriends = onSnapshot(friendsQuery, (snapshot) => {
+  //       const newFriends = snapshot.docs
+  //         .filter(
+  //           (doc) =>
+  //             (doc.data().senderId === currentuser.uid || doc.data().receiverId === currentuser.uid) &&
+  //             doc.data().status === 'accepted'
+  //         )
+  //         .map((doc) => ({ id: doc.id, ...doc.data() }));
+  //       setFriends(newFriends);
+  //     });
+
+  //     return () => {
+  //       unsubscribeFriends();
+  //     };
+  //   }
+  // }, [currentuser, db]);
+
+
+  // const filteredFriends = friends.filter((friend) =>
+  //   friend.senderName.toLowerCase().includes(search.toLowerCase()) ||
+  //   friend.receiverName.toLowerCase().includes(search.toLowerCase())
+  // );
+
+  const [list, setList] = useState([]);
+  const [listTwo, setListTwo] = useState([]);
+
+  const AcceptedListRef = collection(db, 'A');
+  const BRef = collection(db, 'B');
 
   useEffect(() => {
-    if (currentuser) {
+    const unsub = () => {
+      onSnapshot(AcceptedListRef, (snapshot) => {
+        let newbooks = []
+        snapshot.docs.forEach((doc) => {
+          newbooks.push({ ...doc.data(), id: doc.id })
+        });
+        setList(newbooks);
+      })
+    };
 
-      const friendsQuery = query(collection(db, 'friendRequests'), where('status', '==', 'accepted'));
-      const unsubscribeFriends = onSnapshot(friendsQuery, (snapshot) => {
-        const newFriends = snapshot.docs
-          .filter(
-            (doc) =>
-              (doc.data().senderId === currentuser.uid || doc.data().receiverId === currentuser.uid) &&
-              doc.data().status === 'accepted'
-          )
-          .map((doc) => ({ id: doc.id, ...doc.data() }));
-        setFriends(newFriends);
-      });
+    const sub = () => {
+      onSnapshot(BRef, (snapshot) => {
+        let newbooks = []
+        snapshot.docs.forEach((doc) => {
+          newbooks.push({ ...doc.data(), id: doc.id })
+        });
+        setListTwo(newbooks);
+      })
+    };
+    return unsub(), sub();
+  }, []);
 
-      return () => {
-        unsubscribeFriends();
-      };
-    }
-  }, [currentuser, db]);
-
-
-  const filteredFriends = friends.filter((friend) =>
-    friend.senderName.toLowerCase().includes(search.toLowerCase()) ||
-    friend.receiverName.toLowerCase().includes(search.toLowerCase())
-  );
 
   return (
     <>
@@ -66,7 +96,34 @@ const Friends = () => {
 
             <div className="friend-wrapper ">
 
-              {filteredFriends.length > 0 ? (
+              {
+                list.map((item) => {
+                  if (item.currentUid === currentuser.uid) {
+                    return (
+                      <>
+                        <h4>{item.name}</h4>
+                      </>
+                    )
+                  }
+
+                })
+              }
+              
+              {
+                listTwo.map((item) => {
+                  if (item.uid === currentuser.uid) {
+                    return (
+                      <>
+                        <h4>{item.currentName}</h4>
+                      </>
+                    )
+                  }
+
+                })
+              }
+
+
+              {/* {filteredFriends.length > 0 ? (
                 filteredFriends.map((friend) => (
                   <div key={friend.id}>
                     <div className="friend-list-div">
@@ -88,7 +145,7 @@ const Friends = () => {
                 ))
               ) : (
                 <div className="no-friends-text">You have no friends.</div>
-              )}
+              )} */}
 
             </div>
           </div>

@@ -46,6 +46,7 @@ const Login = () => {
                 });
 
 
+
                 const PresenceRefOnline = doc(db, "OnlyOnline", user.uid);
 
                 const userData = {
@@ -57,6 +58,7 @@ const Login = () => {
                     presenceTime: new Date()
                     // presenceTime: new Date()
                 };
+
                 await setDoc(PresenceRefOnline, userData);
 
                 // console.log(user);

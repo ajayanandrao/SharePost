@@ -26,10 +26,11 @@ import { CircularProgress, LinearProgress } from "@mui/material";
 import { VscChromeClose } from "react-icons/vsc";
 import { db, storage } from "../../../../firebase";
 import { AuthContext } from "../../../../AuthContaxt";
-
 import TimeAgo from 'react-timeago';
 import englishStrings from 'react-timeago/lib/language-strings/en';
 import buildFormatter from 'react-timeago/lib/formatters/buildFormatter';
+import photo from "./../../../../Image/img/photo.png";
+import Picker from '@emoji-mart/react';
 
 const UserPost = ({ post, CurrentUser }) => {
   const colRef = collection(db, "AllPosts");
@@ -64,11 +65,11 @@ const UserPost = ({ post, CurrentUser }) => {
   }, []);
 
   function OptionBtn(id) {
-    const dropdownContent = document.getElementById(`myDropdown-${id}`)
-    dropdownContent.classList.toggle('show')
-    if (CurrentUser.displayName !== post.displayName) {
-      document.getElementById(`edit-${id}`).style.display = 'none'
-    }
+    // const dropdownContent = document.getElementById(`myDropdown-${id}`)
+    // dropdownContent.classList.toggle('show')
+    // if (CurrentUser.displayName !== post.displayName) {
+    //   document.getElementById(`edit-${id}`).style.display = 'none'
+    // }
   }
 
   const Heart = async (id) => {
@@ -213,32 +214,30 @@ const UserPost = ({ post, CurrentUser }) => {
     };
   }, [post.id]);
 
+
+  useEffect(() => {
+    const unsubscribe = onSnapshot(
+      query(collection(db, 'AllPosts', post.id, 'likes')),
+      (snapshot) => {
+        setIsliked(
+          snapshot.docs.map((doc) => ({
+            id: doc.id,
+            ...doc.data(),
+          }))
+        );
+        // Log the uid property of each document
+      }
+    );
+
+    return unsubscribe;
+  }, [post.id]);
+
+
   useEffect(() => {
     setLiked(like.findIndex((like) => like.id === CurrentUser?.uid) !== -1);
   }, [like, CurrentUser.uid]);
-  // const userComment = newComment.map((item) => {
 
-  //   return (
-  //     <div className='userComment-div' id={`seeCom-${item.id}`} key={item.id}>
-  //       <div className='comment-div'>
-  //         <img src={item.photoURL} className="comment-img" alt="" />
-  //         <span className='comment-name ms-2'>{item.displayName}</span>
-  //         <div className='close-btn-comment'>
-  //           <IoMdClose style={{ cursor: "pointer" }} onClick={() => deleteComment(item.id)} />
-  //         </div>
-  //       </div>
-  //       <div className="comments">{item.comment}</div>
-  //       {/* <TimeAgo date={item.commentTime.toDate()} /> */}
-  //       {item.commentTime && (
-  //         <TimeAgo className='timeago mt-3'
-  //           style={{
-  //             fontSize: '12px',
-  //             color: 'rgba(255, 255, 255, 0.5)'
-  //           }} date={item.commentTime.toDate()} formatter={formatter} />
-  //       )}
-  //     </div>
-  //   )
-  // });
+
   const formatter = buildFormatter(englishStrings);
   const userComment = newComment.map((item) => {
 
@@ -281,6 +280,37 @@ const UserPost = ({ post, CurrentUser }) => {
   function TimeAgoComponent({ timestamp }) {
     return <ReactTimeago date={timestamp} />;
   }
+
+  const [isliked, setIsliked] = useState([]);
+
+  const handleClick = () => {
+    setAnimate(!animate);
+  };
+
+  function showLike(id) {
+    const element = document.getElementById(`showliked-${id}`)
+    const comment = document.getElementById(`comment-${id}`);
+
+    if (element.style.display === 'none') {
+      element.style.display = 'flex'
+      comment.style.display = 'none';
+    } else {
+      element.style.display = 'none'
+    }
+  }
+
+  const [showEmoji, setShowEmoji] = useState(false);
+  const Emoji = () => {
+    setShowEmoji(!showEmoji);
+  };
+
+  const addEmoji = (e) => {
+    let sym = e.unified.split("-")
+    let codesArray = []
+    sym.forEach((el) => codesArray.push("0x" + el));
+    let emoji = String.fromCodePoint(...codesArray);
+    setComment(getComment + emoji);
+  };
 
   return (
     <>
@@ -338,7 +368,6 @@ const UserPost = ({ post, CurrentUser }) => {
               </div>
             </div>
 
-
             <div className='Feed-Section-Two'>
               <div
                 id={`overlay-${post.id}`}
@@ -371,7 +400,7 @@ const UserPost = ({ post, CurrentUser }) => {
 
                     <div className='thurd-section-edit'>
                       <label htmlFor="EditImg">
-                        <img className="postImg" src={EditImg ? URL.createObjectURL(EditImg) : "item.img"} alt="" />
+                        {/* <img className="postImg" src={EditImg ? URL.createObjectURL(EditImg) : "item.img"} alt="" /> */}
 
 
                         {EditImg && EditImg.type.startsWith('image/') && (
@@ -380,11 +409,11 @@ const UserPost = ({ post, CurrentUser }) => {
 
                         {EditImg && EditImg.type.startsWith('video/') && (
                           <div className="video-container_">
-                            <video width={"300px"} height={"250px"} ref={videoRef} className="video_ ">
+                            <video width={"300px"} height={"250px"} ref={videoRef} onClick={handleClick} className="video_ ">
                               <source src={URL.createObjectURL(EditImg)} type={EditImg.type} />
                             </video>
                             {!isPlaying && (
-                              <div className="play-button_" >
+                              <div className="play-button_" onClick={handleClick}>
                                 {/* <i className="fas fa-play"></i> */}
                               </div>
                             )}
@@ -392,7 +421,9 @@ const UserPost = ({ post, CurrentUser }) => {
                         )}
 
 
-
+                        <div className='overlay-set-photos'>
+                          <img className='photo-img me-2' style={{ width: "25px" }} src={photo} alt="" /> Photos
+                        </div>
                       </label>
                     </div>
 
@@ -416,12 +447,10 @@ const UserPost = ({ post, CurrentUser }) => {
 
               </div>
 
-              <div className='Feed-Post-Text post-Text'>{post.postText}</div>
+              <div className='Feed-Post-Text d-flex'>{post.postText}</div>
 
 
               <div className='Feed-Post-img-Container mt-3'>
-                {/* <img className='Feed-Post-img' src={post.img} alt='' /> */}
-
 
                 {post.img && (post.name.includes('.jpg') || post.name.includes('.png')) ? (
                   <img width={"300px"} src={post.img} alt="Uploaded" className="Feed-Post-img image" />
@@ -449,41 +478,54 @@ const UserPost = ({ post, CurrentUser }) => {
 
             </div>
 
+            <div className="Feed-bottom-container">
 
-            <div className='Feed-Section-three'>
+              <div className="like-container">
 
+                {liked ? (<div onClick={() => Heart(post.id)} className={`HeartAnimation${' animate'}`} >
+                </div>) : (<div onClick={() => Heart(post.id)} className={`HeartAnimation${animate ? '' : ''}`} >
+                </div>)}
 
-              <div className='Feed-Comment-Section-div'>
-                <div className='feed-comment-section-inner' onClick={() => Heart(post.id)} >
-
-                  {liked ? (<div className={`HeartAnimation${' animate'}`} >
-                  </div>) : (<div className={`HeartAnimation${animate ? '' : ''}`} >
-                  </div>)}
-
-                  <div className='like-count' style={{ fontSize: "14px" }}>
-                    {like.length > 0 && (<>{like.length}</>)}
-                  </div>
+                <div className="like-counter" onClick={() => showLike(post.id)}>
+                  {like.length > 0 && like.length}
                 </div>
+
               </div>
 
-
-              <div className='Feed-Comment-Section-div'>
+              <div className="Comment-container">
                 <FaCommentDots
                   onClick={() => comment(post.id)}
-                  style={{ cursor: 'pointer' }}
+                  style={{ cursor: 'pointer', fontSize: "20px" }}
                   className='react-icons'
                 />
-                <span className='ms-2'>{commentCount > 0 && commentCount}</span>
+                <span className='comment-counter ms-2' >{commentCount > 0 && commentCount}</span>
               </div>
 
-
-              <div className='Feed-Comment-Section-div'>
+              <div className="Share-container">
                 <IoMdShareAlt
-                  style={{ cursor: 'pointer' }}
-                  className='react-icons'
-                />
+                  style={{ cursor: 'pointer', fontSize: "20px" }}
+                  className='react-icons' />
               </div>
             </div>
+
+            {/* Like Section =================== */}
+
+            <div className='See-Like-div' style={{ display: 'none' }} id={`showliked-${post.id}`}>
+
+              <div className='userliked' id={`isliked${post.id}`} >
+                {isliked.map((item) => {
+                  return (
+                    <>
+                      <div className='mx-1' style={{ fontSize: "11px" }}>{item.name}</div>
+                    </>
+                  )
+
+                })}
+              </div>
+
+            </div>
+
+            {/* Comment Section ================ */}
 
             <div
               className='Feed-Comment-Div'
@@ -500,21 +542,29 @@ const UserPost = ({ post, CurrentUser }) => {
                   onKeyDown={handleKey}
                 />
 
-                <span
+                <div
+                  onClick={Emoji}
                   style={{
-                    margin: '0 0.5rem',
+                    margin: '0 1.5rem',
                     fontSize: '18px',
                     cursor: 'pointer'
                   }}
                 >
                   😃
-                </span>
+                </div>
                 <IoMdSend type='submit' style={{ fontSize: '20px', cursor: 'pointer' }}
                   onClick={(e) => HandleComment(e, post.id)}
                 />
-                <div className='see-com' onClick={toggleVisibility}>see com..</div>
+                {/* <div className='see-com' onClick={toggleVisibility}>see com..</div> */}
               </div>
-              {isVisible && <div>{userComment}</div>}
+
+              {showEmoji && (<div>
+                <div className='emoji mb-3'>
+                  <Picker onEmojiSelect={addEmoji} />
+                </div>
+              </div>)}
+
+              <div className='mb-3'>{userComment}</div>
 
             </div>
           </div>

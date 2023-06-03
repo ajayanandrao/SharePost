@@ -2,8 +2,9 @@
 import { initializeApp } from "firebase/app";
 
 import { getAuth } from "firebase/auth"
-import { getFirestore} from "firebase/firestore"
+import { getFirestore } from "firebase/firestore"
 import { getStorage } from "firebase/storage";
+import { getDatabase, onValue, ref, set } from "firebase/database";
 
 import { firebase } from "@firebase/app";
 import "@firebase/firestore";
@@ -37,5 +38,8 @@ const auth = getAuth(app);
 const storage = getStorage(app);
 const firestore = getFirestore(app);
 const db = getFirestore(app);
+const database = getDatabase(app);
 
-export {auth, db, storage, firestore };
+export { auth, db, storage, firestore, database };
+
+

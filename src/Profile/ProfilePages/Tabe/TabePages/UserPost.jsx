@@ -236,8 +236,8 @@ const UserPost = ({ post, CurrentUser }) => {
   useEffect(() => {
     setLiked(like.findIndex((like) => like.id === CurrentUser?.uid) !== -1);
   }, [like, CurrentUser.uid]);
- 
- 
+
+
   const formatter = buildFormatter(englishStrings);
   const userComment = newComment.map((item) => {
 
@@ -401,7 +401,7 @@ const UserPost = ({ post, CurrentUser }) => {
 
                     <div className='thurd-section-edit'>
                       <label htmlFor="EditImg">
-                        <img className="postImg" src={EditImg ? URL.createObjectURL(EditImg) : "item.img"} alt="" />
+                        {/* <img className="postImg" src={EditImg ? URL.createObjectURL(EditImg) : "item.img"} alt="" /> */}
 
 
                         {EditImg && EditImg.type.startsWith('image/') && (

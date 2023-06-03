@@ -399,7 +399,7 @@ const Feed = ({ post, CurrentUser }) => {
 
                     <div className='thurd-section-edit'>
                       <label htmlFor="EditImg">
-                        <img className="postImg" src={EditImg ? URL.createObjectURL(EditImg) : "item.img"} alt="" />
+                        {/* <img className="postImg" src={EditImg ? URL.createObjectURL(EditImg) : "item.img"} alt="" /> */}
 
 
                         {EditImg && EditImg.type.startsWith('image/') && (
@@ -452,7 +452,7 @@ const Feed = ({ post, CurrentUser }) => {
               <div className='Feed-Post-img-Container mt-3'>
 
                 {post.img && (post.name.includes('.jpg') || post.name.includes('.png')) ? (
-                  <img width={"300px"} src={post.img} alt="Uploaded" className="Feed-Post-img image" />
+                  <img width={"300px"} src={post.img} alt="Uploaded" className="Feed-Post-img" />
                 ) : post.img ? (
 
                   <div className="video-container">

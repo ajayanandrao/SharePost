@@ -25,7 +25,7 @@
         margin: 0.5rem 0rem;
         padding-right: 0.5rem;
         // background: red;
-        border-top: 1px solid #ccc;
+        // border-top: 1px solid #ccc;
 
         .online-titl-div {
             display: flex;
@@ -281,4 +281,96 @@
 
 .li:hover {
     background-color: $bg;
+}
+
+// =========== tabs >
+
+.tab-black-container {
+    border-top: 1px solid #ccc;
+    width: 300px;
+    margin: 0.5rem 0rem;
+
+    .tab-black {
+        // background-color: #351e5a;
+        display: flex;
+        justify-content: space-between;
+
+        .tab-btn {
+            padding: 1rem 0px;
+            cursor: pointer;
+        }
+
+        .w3-button {
+            &:hover {
+                color: white !important;
+                background-color: transparent !important;
+            }
+        }
+
+        .tab-center-border {
+            // border-left: 1px solid #ccc;
+        }
+    }
+}
+
+
+.notification-icon {
+    width: 30px;
+    height: 30px;
+    position: relative;
+    left: 6px;
+    cursor: pointer;
+    display: flex;
+    justify-content: center;
+    // align-items: center;
+}
+
+.notification-icon-inner {
+    width: 20px;
+    height: 20px;
+    background-color: #f0f0f0;
+    border-radius: 50%;
+    border: 2px solid #F9C23C;
+    position: absolute;
+    top: 8px;
+    // left: 5px;
+    box-sizing: border-box;
+    transform-origin: center;
+    animation: pulse 0.8s infinite ease-in-out;
+}
+
+.notification-text {
+    // font-size: 14px;
+    font-weight: bold;
+    position:relative;
+    z-index: 1;
+}
+
+// .notification-dot {
+//     width: 6px;
+//     height: 6px;
+//     // background-color: red;
+//     border-radius: 50%;
+//     position: absolute;
+//     // top: 8px;
+//     // left: 20px;
+//     opacity: 0;
+//     transform: scale(0);
+//     transition: opacity 0.4s ease-in-out, transform 0.4s ease-in-out;
+// }
+
+.notification-icon:hover .notification-dot {
+    // opacity: 1;
+    transform: scale(1);
+}
+
+@keyframes pulse {
+    0% {
+        transform: scale(0.2);
+    }
+
+    100% {
+        transform: scale(1.7);
+        opacity: 0;
+    }
 }
