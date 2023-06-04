@@ -41,7 +41,7 @@ const ProfileTabes = ({Param}) => {
       </div>
 
       <div id="Friend" style={{ display: "none" }} className="tabcontent">
-        <ParamFriends />
+        <ParamFriends user={Param}/>
       </div>
 
       <div id="Photo" style={{ display: "none" }} className="tabcontent">

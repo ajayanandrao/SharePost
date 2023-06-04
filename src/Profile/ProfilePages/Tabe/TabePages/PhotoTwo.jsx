@@ -43,11 +43,11 @@ const PhotoTwo = ({ post }) => {
             </div> */}
 
 
-            {post.img && isImage(post.name) && (
+            {/* {post.img && isImage(post.name) && (
                 <img width="300px" src={post.img} className="grid-photo" alt="Uploaded" />
-            )}
+            )} */}
 
-            {post.img && isVideo(post.name) && (
+            {/* {post.img && isVideo(post.name) && (
                 <div className="video-container">
                     <video ref={videoRef} className="video" onClick={handleVideoBtnClick}>
                         <source src={post.img} type="video/mp4" />
@@ -61,7 +61,7 @@ const PhotoTwo = ({ post }) => {
                         </a>
                     )}
                 </div>
-            )}
+            )} */}
 
             {/* {post.img && (post.name.includes('.jpg') || post.name.includes('.png')) ? (
                 <img width={"300px"} src={post.img} alt="Uploaded" className="Feed-Post-img image" />

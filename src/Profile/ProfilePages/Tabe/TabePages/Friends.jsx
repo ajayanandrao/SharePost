@@ -5,6 +5,7 @@ import { useEffect } from "react";
 import { addDoc, collection, doc, onSnapshot, query, setDoc, updateDoc, where } from "firebase/firestore";
 import { db } from "../../../../firebase";
 import { AuthContext } from "../../../../AuthContaxt";
+import { Badge, Box, Stack } from "@mui/material";
 
 const Friends = () => {
   const [search, setSearch] = useState("");
@@ -101,26 +102,35 @@ const Friends = () => {
                   if (item.currentUid === currentuser.uid) {
                     return (
                       <>
-                        <h4>{item.name}</h4>
+                        <div className="friend-list-div">
+                          <img className="friend-img" src={item.photoUrl} alt="" />
+                          <h4 className="friend-name">{item.name}</h4>
+
+                        </div>
                       </>
                     )
                   }
 
                 })
               }
-              
+
               {
                 listTwo.map((item) => {
                   if (item.uid === currentuser.uid) {
                     return (
                       <>
-                        <h4>{item.currentName}</h4>
+                        <div className="friend-list-div">
+                          <img className="friend-img" src={item.currentPhoto} alt="" />
+                          <h4 className="friend-name">{item.currentName}</h4>
+
+                        </div>
                       </>
                     )
                   }
 
                 })
               }
+
 
 
               {/* {filteredFriends.length > 0 ? (

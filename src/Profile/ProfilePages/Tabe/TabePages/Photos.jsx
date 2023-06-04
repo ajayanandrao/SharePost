@@ -21,17 +21,7 @@ const Photos = () => {
   const [isPlaying, setIsPlaying] = useState(false);
   const videoRef = useRef([]);
 
-  // const handleVideoBtnClick = (id) => {
-  //   const video = videoRef.current;
-  //   if (video.paused) {
-  //     video.play();
-  //     setIsPlaying(true);
-  //   } else {
-  //     video.pause();
-  //     setIsPlaying(false);
-  //   }
-  // };
-  // Video player End ==========
+
   const handleVideoBtnClick = (id) => {
     const video = videoRef.current[id];
     if (video.paused) {
@@ -224,68 +214,33 @@ const Photos = () => {
   return (
     <>
 
-      {/* Ovarlay ============= */}
-
       <div id="PhotOverlay">
-
         <div id="Photo-text">
 
-          <div className="photo-inner-div">
-            <div className="photo-close">
+          <img onClick={() => off(selectedId)} src={selectedPhoto} className="overlay-photo" alt="Selected" />
 
-              <div className="Photo-btn-one">
-                <CgClose className="photo-close-btn" onClick={() => off(selectedId)} />
-              </div>
-
-            </div>
-            <img src={selectedPhoto} className="overlay-photo" alt="Selected" />
-          </div>
         </div>
       </div>
 
-      {/* Video Ovarlay ========== */}
+      {/*  */}
 
-      <div id="PhotOverlay">
-
-        <div id="Photo-text">
-
-          <div className="photo-inner-div">
-            <div className="photo-close">
-
-              <div className="Photo-btn-one">
-                <CgClose className="photo-close-btn" onClick={() => off(selectedId)} />
-              </div>
-
-            </div>
-            <img src={selectedPhoto} className="overlay-photo" alt="Selected" />
-          </div>
-        </div>
-      </div>
-
-      {/* ======= */}
-      <div className="mb-4 grid-center">
-        <div className="grad-width" >
+      <div className="photo-container-height">
+        <div class="grid-parent-container">
           <div className="grid-container" >
             {newData}
           </div>
         </div>
-      </div>
 
+        <div className="video-text"><h3> Video </h3></div>
 
-      {/* <hr className="video-hr" /> */}
-      <div className="div">
-        <div className="Photo-video-container">
-          <span className="Vdieo-text">Video</span>
-        </div>
-      </div>
-      {/*  */}
-      <div className="grad-width" >
-        <div className="grid-center" >
+        <div class="grid-parent-container">
           <div className="video-container-div">
             {VideoData}
           </div>
         </div>
+
       </div>
+
     </>
   );
 };

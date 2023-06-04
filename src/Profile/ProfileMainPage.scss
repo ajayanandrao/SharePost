@@ -1,0 +1,9 @@
+@import "./../Styles/Mixin_New.scss";
+
+//respond-to
+
+.profile-main-container {
+    @include respond-to(xs) {
+        margin-top: 45px;
+    }
+}

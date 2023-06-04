@@ -293,6 +293,7 @@ const Right = () => {
         setActiveCity(cityName);
     };
 
+    const [num, setNum] = useState("");
 
     return (
         <>
@@ -311,23 +312,34 @@ const Right = () => {
 
                 <div className='tab-black-container'>
                     <div className=" tab-black">
-                        <div className={`  tab-btn  ${activeCity === 'Online' ? 'active' : ''}`} onClick={() => openCity('Online')}>Online <GoPrimitiveDot className='online-icon' /></div>
+                        <div className={`  tab-btn  ${activeCity === 'Online' ? 'active' : ''}`} onClick={() => openCity('Online')}>Online <GoPrimitiveDot className='online-icon' />
+                            
+                            <span style={{fontSize:"14px"}}>
+                                {onlineUsers.includes(currentuser) ? onlineUsers.length - 1 : onlineUsers.length - 1}
+                            </span>
+                        
+                        </div>
                         <div className={`  tab-btn ${activeCity === 'Request' ? 'active' : ''}`} onClick={() => openCity('Request')}>
 
                             {friendRequests.some(item => item.receiverUid === currentuser.uid && item.status !== 'accepted') ? (
                                 <>
-                                    <div class="notification-icon">
-                                        <span class="notification-icon-inner"></span>
-                                        <span class="notification-text">🔔</span>
-                                        <span class="notification-dot"></span>
+                                    <div className="noti-badge">
+                                        <span className='badge-icon'>🔔</span>
+                                        <div className="noti-count-div">
+                                            <div>{friendRequests.length}</div>
+                                        </div>
                                     </div>
                                 </>
-                            ) : <>🔔</>}
+                            ) : <>
+                                <div className="noti-badge">
+                                    <span className='badge-icon'>🔔</span>
+                                </div>
+                            </>}
 
                         </div>
                     </div>
 
-                    <div id="Online" className="w3-container city" style={{ display: activeCity === 'Online' ? 'block' : 'none' }}>
+                    <div id="Online" className="w3-container city w3-animate-left" style={{ display: activeCity === 'Online' ? 'block' : 'none' }}>
                         <div className="right-bottom-div">
 
                             {onlineUsers.map((item) => {
@@ -379,7 +391,7 @@ const Right = () => {
                         </div>
                     </div>
 
-                    <div id="Request" className="w3-container city" style={{ display: activeCity === 'Request' ? 'block' : 'none' }}>
+                    <div id="Request" className="w3-container city w3-animate-right" style={{ display: activeCity === 'Request' ? 'block' : 'none' }}>
 
 
                         {friendRequests.length === 0 ? (
@@ -428,7 +440,6 @@ const Right = () => {
                 </div>
 
 
-
                 {/* <div className="right-bottom-div">
                     <div className="online-titl-div">
                         <span>Online</span> <div><GoPrimitiveDot className='online-icon' /></div>
@@ -457,9 +468,6 @@ const Right = () => {
                         }
                     })}
                 </div> */}
-
-
-
 
                 {/* {friendRequests.map((item) => {
                     if (item.receiverUid === currentuser.uid && item.status !== 'accepted') {

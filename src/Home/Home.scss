@@ -1,4 +1,5 @@
 @import "./../Styles/Variable";
+@import "./../Styles/Mixin_New.scss";
 
 
 #scrollTopBtn {
@@ -17,6 +18,13 @@
     transition: 0.3s ease-in-out;
     border: 1px solid $link;
     z-index: 1;
+
+    @include respond-to(xs){
+        bottom: 80px;
+        right: 15px;
+        width: 35px;
+        height: 35px;
+    }
 
     &:hover {
         background: #0b243b !important;

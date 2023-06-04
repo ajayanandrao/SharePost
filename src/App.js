@@ -16,8 +16,9 @@ function App() {
 
   return (
     <>
-      <Router  basename="/SharePost">
-        <Navbar/>
+      <Router basename="/SharePost">
+        <Navbar />
+        <NewNavbar />
         <Routes>
           <Route exact path='/' element={<Login />} />
           <Route exact path='navbar' element={<NewNavbar />} />

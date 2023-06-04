@@ -1,26 +1,115 @@
-.navbar-div {
-    width: 100%;
-    height: 80px;
-    background:rgba(0, 0, 0, 0);
-    // background: #0b243b27;
-    // background: #030b1327;
+@import "./../Styles/Variable";
+@import "./../Styles/Mixin_New.scss";
 
-    // box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.2);
-
-    // box-shadow: rgba(0, 0, 0, 0.16) 0px 3px 6px, rgba(0, 0, 0, 0.23) 0px 3px 6px;
-    
-    box-shadow: rgba(9, 30, 66, 0.25) 0px 4px 8px -2px, rgba(9, 30, 66, 0.08) 0px 0px 0px 1px;
-
-    // box-shadow: rgba(0, 0, 0, 0.30) 0px 25px 20px -18px;
-
-    backdrop-filter: blur(12px);
+.navbarTop {
+    display: none;
     position: fixed;
     top: 0;
-    // border-bottom: 1px solid #4fcaf383;
+    left: 0;
+    width: 100%;
+    padding: 3px;
+    text-align: center;
+    z-index: 1;
+    background: #081524;
+    backdrop-filter: blur(20px);
+    border-bottom: 1px solid $link;
+
+    @include respond-to (xs) {
+        display: flex;
+    }
+
+    .navbarTop-title-container {
+        display: flex;
+    }
+
+    .navbarTop-search-container {
+        flex: 1;
+        display: flex;
+        justify-content: end;
+
+        .navbarTop-search-icon {
+            font-size: 20px;
+        }
+
+        .navbarTop-search-div {
+            display: flex;
+            align-items: center;
+
+            input {
+                width: 180px;
+                color: white;
+                padding-inline-start: 15px;
+                background: $bg-div;
+                border: none;
+                height: 30px;
+                border-radius: 15px;
+
+                &:focus {
+                    outline: 1px solid $link;
+                }
+            }
+        }
+    }
 }
 
-.nav-sec-div {
-    width: 100%;
-    height: 500px;
+.navbarTop a {
+    text-decoration: none;
+    padding: 8px;
+    margin: 0 5px;
+    cursor: pointer;
+}
 
+
+// ==========
+
+.ajay{
+    font-size: 18px;
+    font-family: 'Pacifico', cursive;
+}
+
+.navbar-bottom {
+    display: none;
+    justify-content: space-between;
+    align-items: center;
+    height: 50px;
+    position: fixed;
+    left: 0;
+    bottom: 0;
+    width: 100%;
+    padding: 10px;
+    text-align: center;
+    z-index: 2;
+    background: #081524;
+    backdrop-filter: blur(20px);
+    border-top: 1px solid $link;
+    color: white;
+
+    @include respond-to (xs) {
+        display: flex;
+    }
+
+    .navbar-bottom-img {
+        width: 35px;
+        height: 35px;
+        border-radius: 50%;
+        object-fit: cover;
+    }
+
+
+    .navbar-bottom-bi {
+        font-size: 25px;
+    }
+
+    .navbar-bottom-icon {
+        width: 30px;
+        height: 30px;
+
+    }
+}
+
+.navbar-bottom a {
+    cursor: pointer;
+    text-decoration: none;
+    // padding: 8px;
+    margin: 0 20px;
 }

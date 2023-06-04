@@ -13,7 +13,7 @@ import { collection, deleteDoc, doc, getDoc, onSnapshot, updateDoc } from "fireb
 import { Avatar } from "@mui/material";
 
 const openNav = () => {
-  document.getElementById("mySidenav").style.width = "230px";
+  document.getElementById("mySidenav").style.width = "300px";
 };
 
 const closeNav = () => {
@@ -70,14 +70,34 @@ const Navbar = () => {
 
   const [search, setSearch] = useState("");
 
+  // =========
+
+  const [friendRequests, setFriendRequests] = useState([]);
+
+  useEffect(() => {
+
+    const colRef = collection(db, 'friendRequests')
+    const userlist = () => {
+      onSnapshot(colRef, (snapshot) => {
+        let newbooks = []
+        snapshot.docs.forEach((doc) => {
+          newbooks.push({ ...doc.data(), id: doc.id })
+        });
+        setFriendRequests(newbooks);
+      })
+    };
+    return userlist();
+  }, []);
+
+
   return (
     <>
       <div className="navbartop" style={{ display: "none" }} id="navId" >
         <div className="container-fluid al-center">
           <RxHamburgerMenu className="navbar-lines" onClick={openNav} />
           <div className="navbar-name">
-            <Link to="/" className="link">
-              Navbar
+            <Link to="/" className="link ajay">
+              Ajay
             </Link>
           </div>
 
@@ -108,37 +128,64 @@ const Navbar = () => {
             <div className="nav-link">
               <Link to="/" onClick={closeNav} className="a">
                 <span className="icon-c">
-                  <RiHomeFill className="nav-icon" /> Home
+
+                  <div className="sidenave-icon">
+                    <img src="https://www.elevenforum.com/data/attachments/33/33648-91edd6d3b7604f5686529b4a2a4aa43c.jpg" style={{ width: "25px" }} className="nav-icon" alt="" />
+                  </div>
+
+                  <div className="sidenav-text">
+                    Home
+                  </div>
                 </span>
               </Link>
 
               <a href="#" onClick={closeNav} className="a">
                 <span className="icon-c">
-                  <BsFillHeartFill
-                    className="nav-icon"
-                    style={{ fontSize: "20px" }}
-                  />
-                  Notification
+                  <div className="sidenave-icon">
+                    <span className="nav-icon notifiaction" >🔔</span>
+                  </div>
+
+                  <div className="sidenav-text">
+                    Notification <div className="noti-count">{friendRequests.length}</div> 
+                  </div>
                 </span>
               </a>
 
               <a href="#" onClick={closeNav} className="a">
                 <span className="icon-c">
-                  <BsMessenger
-                    className="nav-icon"
-                    style={{ fontSize: "20px" }}
-                  />
-                  Message
+                  <div className="sidenave-icon">
+                    {/* <span className="nav-icon notifiaction" >🔔</span> */}
+                    <i class="bi bi-person-heart nav-icon"></i>
+                  </div>
+
+                  <div className="sidenav-text">
+                    Request
+                  </div>
+                </span>
+              </a>
+
+              <a href="#" onClick={closeNav} className="a">
+                <span className="icon-c">
+                  <div className="sidenave-icon">
+                    <img src="https://scontent.fpnq13-2.fna.fbcdn.net/v/t39.8562-6/120009688_325579128711709_1736249742330805861_n.png?_nc_cat=1&ccb=1-7&_nc_sid=6825c5&_nc_ohc=HNZTijLo3_IAX_GfPt4&_nc_ht=scontent.fpnq13-2.fna&oh=00_AfAqeNnJJrP6Gl3KrHrM4cekb1vHmDLVIru8mdSnJwsVXg&oe=6481A8FD" className="nav-icon" style={{ width: "24px" }} alt="" />
+                  </div>
+                  <div className="sidenav-text">
+                    Message
+                  </div>
                 </span>
               </a>
 
               <a href="#" className="a" onClick={SignOut} type="button">
                 <span onClick={closeNav} className="icon-c">
-                  <IoLogOut
-                    className="nav-icon"
-                    style={{ fontSize: "26px", marginRight: "15px" }}
-                  />
-                  Log out
+                  <div className="sidenave-icon">
+                    <IoLogOut
+                      className="nav-icon duar"
+
+                    />
+                  </div>
+                  <div className="sidenav-text">
+                    Log out
+                  </div>
                 </span>
               </a>
             </div>

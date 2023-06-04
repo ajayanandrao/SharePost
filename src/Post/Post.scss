@@ -1,14 +1,24 @@
 @import "./../Styles/Mixin.scss";
+@import "./../Styles/Mixin_New.scss";
 @import "./../Styles/Variable.scss";
+
+//respond-to
 
 .post-container {
     width: 500px;
-    background: #0B243B;
+    background: #0b243b;
     border-radius: 0.5rem;
     overflow: hidden;
     color: rgba(255, 255, 255, 0.5);
     border: 1px solid $link;
     margin-bottom: 0.7rem;
+    // margin-top: 0.5rem;
+
+    @include respond-to(xs){
+        margin-top: 50px;
+        margin-left:0.5rem;
+        margin-right:0.5rem;
+    }
     .post-inner {
         padding: 1rem;
     }
